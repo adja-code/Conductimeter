@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation du code python &mdash; Documentation Conductimètre 1</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="prev" title="Mesures" href="Mesures.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Conductimètre
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Etalonnage.html">Etalonnage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Mesures.html">Mesures</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation du code python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-setup">Description de la fonction setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.setup"><code class="docutils literal notranslate"><span class="pre">setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-mesure-etalonnage">Description de la fonction mesure_etalonnage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.mesure_etalonnage"><code class="docutils literal notranslate"><span class="pre">mesure_etalonnage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-d-etalonnage">Description de la fonction d’étalonnage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.Etalonnage"><code class="docutils literal notranslate"><span class="pre">Etalonnage()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-de-mesures">Description de la fonction de mesures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.Mesures"><code class="docutils literal notranslate"><span class="pre">Mesures()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-graph-conductimeter">Description de la fonction graph_conductimeter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.graph_conductimeter"><code class="docutils literal notranslate"><span class="pre">graph_conductimeter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-acceuil">Description de la fonction acceuil</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Conductimètre</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Documentation du code python</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Documentation.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="documentation-du-code-python">
+<h1>Documentation du code python<a class="headerlink" href="#documentation-du-code-python" title="Lien permanent vers cette rubrique"></a></h1>
+<section id="description-de-la-fonction-setup">
+<h2>Description de la fonction setup<a class="headerlink" href="#description-de-la-fonction-setup" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ADNI_ProgrammePython.setup">
+<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.setup" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Paramètre d’initialisation de la carte Arduino.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arduino</strong> – Localisation de la carte arduino du conductimètre.</p>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>TYPE</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-mesure-etalonnage">
+<h2>Description de la fonction mesure_etalonnage<a class="headerlink" href="#description-de-la-fonction-mesure-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ADNI_ProgrammePython.mesure_etalonnage">
+<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">mesure_etalonnage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.mesure_etalonnage" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu’elles sont stables”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – nombre de mesures par étalon, décidé dans les valeurs par défaut.</p>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>list_tension_etalon</strong> – Liste des tensions mesurées pendant l’étalonnage.</p>
+</dd>
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-d-etalonnage">
+<h2>Description de la fonction d’étalonnage<a class="headerlink" href="#description-de-la-fonction-d-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ADNI_ProgrammePython.Etalonnage">
+<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">Etalonnage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.Etalonnage" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui, pour le nombre d’étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tensino et conductivité, puis trace le graphique et renvoie la droite d’étalonnage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbr_etalon</strong> (<em>int</em>) – Nombre d’étalon pour l’étalonnage.</p></li>
+<li><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – Nombre de mesure à faire pour chaque étalon.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>droite</strong> – Droite d’étalonnage sous la forme ax + b.</p>
+</dd>
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.poly1d</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-de-mesures">
+<h2>Description de la fonction de mesures<a class="headerlink" href="#description-de-la-fonction-de-mesures" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ADNI_ProgrammePython.Mesures">
+<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">Mesures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_echantillon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">droite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_echantillon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.Mesures" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbr_echantillon</strong> (<em>int</em>) – Nombre d’échantillons à mesurer dans la série.</p></li>
+<li><p><strong>droite</strong> (<em>numpy.poly1d</em>) – Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.</p></li>
+<li><p><strong>nbr_mesure_par_echantillon</strong> (<em>int</em>) – Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-graph-conductimeter">
+<h2>Description de la fonction graph_conductimeter<a class="headerlink" href="#description-de-la-fonction-graph-conductimeter" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ADNI_ProgrammePython.graph_conductimeter">
+<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">graph_conductimeter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.graph_conductimeter" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui permet de tracer à partir du fichier data_conductivité.csv la température et la conductivité en fonction du temps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-acceuil">
+<h2>Description de la fonction acceuil<a class="headerlink" href="#description-de-la-fonction-acceuil" title="Lien permanent vers cette rubrique"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="Mesures.html" class="btn btn-neutral float-left" title="Mesures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Adja Condé, Nina Rubin, François Métivier.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+Documentation du code python
+============================
+
+
+Description de la fonction setup
+--------------------------------
+
+.. autofunction:: ADNI_ProgrammePython.setup
+
+
+Description de la fonction mesure_etalonnage
+--------------------------------------------
+
+.. autofunction:: ADNI_ProgrammePython.mesure_etalonnage
+
+
+Description de la fonction d'étalonnage
+---------------------------------------
+
+.. autofunction:: ADNI_ProgrammePython.Etalonnage
+
+Description de la fonction de mesures 
+-------------------------------------
+
+.. autofunction:: ADNI_ProgrammePython.Mesures 
+
+Description de la fonction graph_conductimeter
+----------------------------------------------
+
+.. autofunction:: ADNI_ProgrammePython.graph_conductimeter 
+
+
+
+
+
+
+

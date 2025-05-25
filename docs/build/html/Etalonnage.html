@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Etalonnage &mdash; Documentation Conductimètre 1</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/translations.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="next" title="Mesures" href="Mesures.html" />
+    <link rel="prev" title="Installation" href="Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Conductimètre
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" aria-label="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Sommaire:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Etalonnage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#protocole">Protocole</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#principe-general-du-code-python">Principe général du code python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Mesures.html">Mesures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Documentation.html">Documentation du code python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Conductimètre</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Etalonnage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Etalonnage.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="etalonnage">
+<h1>Etalonnage<a class="headerlink" href="#etalonnage" title="Lien permanent vers cette rubrique"></a></h1>
+<p>Un nouveau calibrage est conseillé à chaque nouvelle utilisation du conductimètre.
+Cependant, le programme enregistre à chaque fois le dernier étalonnage en date et le réutilise si
+vous n’en refaites pas.</p>
+<section id="protocole">
+<h2>Protocole<a class="headerlink" href="#protocole" title="Lien permanent vers cette rubrique"></a></h2>
+<ol class="arabic simple">
+<li><p>Entrez le nombre d’étalon que vous voulez mesurer, il est conseillé d’en faire au moins 3.</p></li>
+<li><p>Indiquez la conductivité de votre premier étalon.</p></li>
+</ol>
+<p><strong>Remarque</strong> : Si cette mesure correspond à 12,8 mS/cm, 1413 μS/cm ou 5000 μS/cm, les
+conductivités seront corrigées selon la température de la solution. Il vous faudra alors
+plonger le thermomètre dans la solution.</p>
+<ol class="arabic simple" start="3">
+<li><p>Versez votre étalon dans un bécher de 50mL.</p></li>
+</ol>
+<p>4. Plongez le conductimètre et le thermomètre dans la solution en les immergeant bien
+comme sur le schéma suivant :</p>
+<figure class="align-default">
+<img alt="_images/schema_electrodes.png" src="_images/schema_electrodes.png" />
+</figure>
+<p>5. Appuyez sur Entrée pour lancer la mesure.
+Cette étape peut prendre du temps.</p>
+<p>6. L’écart type ainsi qu’un graphique vous sont affichés, il vous faut indiquer à l’ordinateur si la
+mesure est assez stable.
+Si la mesure n’est pas stable, elle sera effectuée une nouvelle fois.</p>
+<p>7. Une fois que vous avez indiqué la série de mesure comme stable, vous pouvez passer à la
+solution étalon suivante en répétant les étapes 2 à 6.</p>
+<ol class="arabic simple" start="8">
+<li><p>Une fois tous vos étalons faits, la courbe d’étalonnage devrait s’afficher sur votre ordinateur.</p></li>
+</ol>
+<p>Ce calibrage est ainsi enregistré dans votre ordinateur sous le nom <strong>dernier_étalonnage.csv’</strong>
+en écrasant le dernier fichier du même nom.
+<em>Remarque : Si vous voulez le conserver même si vous
+refaite un étalonnage, il vous suffit de le renommer.</em>
+Une fois toutes ces étapes effectuées, vous avez fini le calibrage. Vous pouvez passer aux mesures.</p>
+</section>
+<section id="principe-general-du-code-python">
+<h2>Principe général du code python<a class="headerlink" href="#principe-general-du-code-python" title="Lien permanent vers cette rubrique"></a></h2>
+<p>Le conductimètre que nous avons construit mesure une tension en bits convertie simplement en volt. Or il existe une relation linéaire entre cette tension et la conductivité d’une solution. L’étalonnage nous permet de réaliser une régression linéaire  à partir d’échatillons dont la conductivité est connue, nous permettant par la suite de déterminer la conductivité de n’importe quel échantillon.</p>
+<p>La conductivité varie de façon linéaire en fonction de la température. En revanche cette relation dépend de la conductivité initiale de notre échantillon. Le code python que nous avons développé intègre des corrections de température uniquement pour des solutions étalons de 12 880 us/cm, 1413us/cm et 5000 us/cm. Cela est problématique pour deux raisons. D’une part les solutions étalons mis à disposition des utilisateurs n’ont pas nécessairement ces valeurs de conductivité; D’autre part effectuer une correction de température uniquement pendant l’étalonnage suppose que la température  de la solution reste constante pendant toute la durée de la manipulation.</p>
+<figure class="align-default">
+<img alt="_images/correction_temp_12880.png" src="_images/correction_temp_12880.png" />
+</figure>
+<figure class="align-default">
+<img alt="_images/correction_temp_1413.png" src="_images/correction_temp_1413.png" />
+</figure>
+<figure class="align-default">
+<img alt="_images/correction_temp_5000.png" src="_images/correction_temp_5000.png" />
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pied de page">
+        <a href="Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+        <a href="Mesures.html" class="btn btn-neutral float-right" title="Mesures" accesskey="n" rel="next">Suivant <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Adja Condé, Nina Rubin, François Métivier.</p>
+  </div>
+
+  Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
