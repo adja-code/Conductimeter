@@ -11,7 +11,7 @@
 * Le programme permet de contôler un conductimètre équipé d'une sonde K1 ou K10 et d'une sonde de température. 
 * Il est le fruit de la collaboration entre plusieurs étudiants et enseignants chercheurs de l'Institut de Physique du Globe de Paris 
 * Pour le citer :
-Condé, A., Rubin, N., Parcineau, S., Perez, M., De Boisresdon, A., Jacquemard, R., Sadoudi, L., Schmeitzky, B., ..., Deutsh, G., Baussant, J., Blaise, T., Goumis, L., Junghans, G., Le Van, C., Lelieur, F., Mielle, M., Nunes, G., Perrillat Mandry, A., Sagorin, P., Shanker, P., Spiparan, T., Wu M. Lumembe, O. & Métivier F. (2025). SAFE-M-CONDUCTIMETRE Un conductimètre low cost pour l'enseignement [Computer Software]. https://github.com/adja-code/Conductimetre
+Condé, A., Rubin, N., Parcineau, S., Perez, M., De Boisresdon, A., Jacquemard, R., Sadoudi, L., Schmeitzky, B., ..., Deutsh, G., Baussant, J., Blaise, T., Goumis, L., Junghans, G., Le Van, C., Lelieur, F., Mielle, M., Nunes, G., Perrillat Mandry, A., Sagorin, P., Shanker, P., Spiparan, T., Wu M. Lumembe, O. & Métivier F. (2025). SAFE-M-CONDUCTIMETRE Un conductimètre low cost pour l'enseignement [Computer Software]. https://github.com/adja-code/Conductimeter
 
 
 ## L'appareil <a class="anchor" id="appareil"></a>
