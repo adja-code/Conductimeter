@@ -140,6 +140,41 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
 #
 #########################################################
 
+def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
+    '''
+    Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu'elles sont stables'
+
+    Parameters
+    ----------
+    nbr_mesure_par_etalon : int
+        nombre de mesures par étalon, décidé dans les valeurs par défaut.
+
+    Returns
+    -------
+    list_tension_etalon : list
+        Liste des tensions mesurées pendant l'étalonnage.
+
+    '''
+    conductimeter = setup()
+    list_tension_etalon = []
+    numerotation = []
+    print('Les mesures sont en cours, attendez s\'il vous plait.')
+    conductimeter.flushInput()
+    for k in range(nbr_mesure_par_etalon):
+        lect = conductimeter.readline().decode().strip('\r\n').split(',')
+        list_tension_etalon.append(float(lect[1]))
+        numerotation.append(k*0.01)
+        time.sleep(0.01)
+    plt.figure()
+    plt.plot(numerotation, list_tension_etalon, 'o')
+    plt.xlabel('Temps (s)')
+    plt.ylabel('Tension (V)')
+    plt.show()
+    
+    return list_tension_etalon
+
+
+
 def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
     '''
     Fonction qui, pour le nombre d'étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tension et conductivité, puis trace le graphique et renvoie la droite d'étalonnage
