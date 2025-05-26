@@ -67,4 +67,72 @@ def port_connexion(br = 9600 , portIN = '') :
                 conn = True
             pass     
     return port , s
+    
+###################################
+    
+    
+def fn_settings(portIN , s , br , nb_inter , time_inter) :
+    """
+    Configuration des paramètres modifiables par l'utilisateur.
+
+    Parameters
+    ----------
+    portIN : string
+        Identifiant du port série sur lequel le script doit lire des données.
+    s : serial.tools.list_ports_common.ListPortInfo
+        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié.
+    br : int
+        Flux de données en baud.
+    nb_inter : int
+        Nombre de valeurs utilisées pour constituer une mesure (une mesure correspond à la moyenne de toutes les valeurs prélevées).
+    time_inter : float
+        Temps d'intervalle entre chaque prélèvement de valeur au sein d'une mesure.
+
+    Returns
+    -------
+    portIN : string
+        Identifiant du port série sur lequel le script doit lire des données.
+    s : serial.tools.list_ports_common.ListPortInfo
+        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié.
+    br : int 
+        Flux de données en baud.
+    nb_inter : int
+        Nombre de valeurs utilisées pour constituer une mesure (une mesure correspond à la moyenne de toutes les valeurs prélevées).
+    time_inter : float
+        Temps d'intervalle entre chaque prélèvement de valeur au sein d'une mesure.
+
+    """
+    
+    print("Configurer le port de connexion : P \nChanger le flux (baudrate) : B \nChanger le temps et la fréquence de mesure : T")
+    setting = input('>>> ')
+    if setting == 'P' or setting == 'p':
+        print('Saisissez le chemin du port (pour tester toutes les connexions périphériques de l\'ordinateur, laissez le champ vide)')
+        port_name = input('>>> ')
+        try :
+            portIN , s = port_connexion(br, port_name)
+        except Exception as inst :
+            print("/!\ Echec de l'opération.")
+            print('Erreur :',inst)
+            pass
+    elif setting == 'B' or setting == 'b' :
+        try :
+            br = int(input('Saisissez le nouveau baudrate : '))
+            portIN , s = port_connexion(br, portIN)
+            print('Paramètre enregistré.')
+        except :
+            print('/!\ Saisie invalide.')
+            pass
+    elif setting == 'T' or setting == 't' :
+        try :
+            time_measurement = float(input('Saisissez la durée d\'une mesure (sec) : '))
+            nb_inter = int(input('Saisissez le nombres de valeurs composant une mesure : '))
+            time_inter = time_measurement / nb_inter
+            print("Une mesure comprend désormais ",nb_inter," valeurs, espacées entre elles de ",time_inter," secondes.\n")
+        except :
+            print('/!\ Saisie invalide.')
+            pass
+    else :
+        print('/!\ Saisie invalide.')
+    return portIN , s, br , nb_inter , time_inter
+
 
