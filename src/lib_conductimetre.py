@@ -37,7 +37,7 @@ def port_connexion(br = 9600 , portIN = '') :
 
     """
 
-    #arduino_list=['85035323234351504260','85035323234351E09062','75439313737351402252','8503532323435130F142','75330303934351B05162']
+    #arduino_list=['0x7fa89e971690']
 #remplacer par la liste des numéros de série des cartes arduinos des conductimètres 
     if portIN == '' :
         ports = list(serial.tools.list_ports.comports())
