@@ -1,9 +1,10 @@
-from lib_conductimetre import *
+from lib_conductimetre import port_connexion()
+
 
 
 if __name__ == '__main__':
 
-    plt.ion()
+    plt.ion() 
 
     try:
         port, s = port_connexion()

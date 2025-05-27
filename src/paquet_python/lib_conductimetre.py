@@ -140,7 +140,7 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
 #
 #########################################################
 
-def mesure_etalonnage(nbr_mesure_par_etalon,port_test):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
+def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
     '''
     Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu'elles sont stables'
 
@@ -272,7 +272,13 @@ def Etalonnage_existant():
     cali_chosen = glob.glob('./CALIB/*%s.csv' % (cali_dispo[int(res)][-28:-4]))
     
 # Fonction à compléter Etalonnage_existant à compléter et à adapter à la conductivité 
-    return droite 
+
+
+
+
+
+
+     return droite 
 
 
 def default_calibration() : 
@@ -281,36 +287,36 @@ def default_calibration() :
     Tension =[] #Effectuer une série de 200 mesures et prendre la moyenne des tensions pour chaque solution étalon 
 
  #Correction de la conductivité par la température 
-    Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
-    Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
-    Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
-    Conductivite_5000 = [2760,3180,3615,4063,4155,4245,4337,4429,4523,4617,4711,4805,4902,5000,5096,5190,5286,5383,5479,5575]
+     Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+     Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
+     Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
+     Conductivite_5000 = [2760,3180,3615,4063,4155,4245,4337,4429,4523,4617,4711,4805,4902,5000,5096,5190,5286,5383,5479,5575]
      
-    reg12880 = np.polyfit(Temperature,Conductivite_12880,1)
-    droite_12880 = np.poly1d(reg12880)
-     
-     
-    reg1413 = np.polyfit(Temperature,Conductivite_1413,1)
-    droite_1413 = np.poly1d(reg1413)
+     reg12880 = np.polyfit(Temperature,Conductivite_12880,1)
+     droite_12880 = np.poly1d(reg12880)
      
      
-    reg5000 = np.polyfit(Temperature,Conductivite_5000,1)
-    droite_5000 = np.poly1d(reg5000)
+     reg1413 = np.polyfit(Temperature,Conductivite_1413,1)
+     droite_1413 = np.poly1d(reg1413)
      
-    Conductivite[1]= droite_12880(20)#remplacer 20 par la température moyenne de la salle dans laquelle s'effectue les manips 
-    Conductivite[2]= droite_5000(20)
-    Conductivite[3]= droite_1413(20)
      
-    reg = np.polyfit(Tension,Conductivite_12880,1)
-    droite= np.poly1d(reg)
+     reg5000 = np.polyfit(Temperature,Conductivite_5000,1)
+     droite_5000 = np.poly1d(reg5000)
      
-    plt.figure()
-    plt.plot(Tension,Conductivite)
-    plt.xlabel('Tension en V')
-    plt.ylabel('Conductivité en us/cm')
-    plt.title('Courbe d\'étalonnage par défaut')
+     Conductivite[1]= droite_12880(20)#remplacer 20 par la température moyenne de la salle dans laquelle s'effectue les manips 
+     Conductivite[2]= droite_5000(20)
+     Conductivite[3]= droite_1413(20)
+     
+     reg = np.polyfit(Tension,Conductivite_12880,1)
+     droite= np.poly1d(reg)
+     
+     plt.figure()
+     plt.plot(Tension,Conductivite)
+     plt.xlabel('Tension en V')
+     plt.ylabel('Conductivité en us/cm')
+     plt.title('Courbe d\'étalonnage par défaut')
     
-    return droite
+     return droite
 
 
 
