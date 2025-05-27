@@ -37,7 +37,7 @@ def port_connexion(br = 9600 , portIN = '') :
 
     """
 
-    #arduino_list=['0x7fa89e971690']
+    arduino_list=['0x7fa89e971690']
 #remplacer par la liste des numéros de série des cartes arduinos des conductimètres 
     if portIN == '' :
         ports = list(serial.tools.list_ports.comports())
@@ -48,7 +48,8 @@ def port_connexion(br = 9600 , portIN = '') :
     while conn == False :
         try :
             port = ports[i] 
-            if portIN == '' and (port.manufacturer == 'Arduino (www.arduino.cc)' or port.serial_number in arduino_list ):
+            #if portIN == '' and (port.manufacturer == 'Arduino (www.arduino.cc)' or port.serial_number in arduino_list ): (Version intiale du code )
+            if portIN == '' and (port.serial_number in arduino_list ):
                 port = port.device
                 port = (port).replace('cu','tty')
                 s = serial.Serial(port=port, baudrate=br, timeout=5) 
@@ -56,8 +57,8 @@ def port_connexion(br = 9600 , portIN = '') :
                 print('Connexion établie avec le port', port)
             else :
                 s = serial.Serial(port=port, baudrate=br, timeout=5)
-                conn = True
-                print('Connexion établie avec le port', port)
+                conn = False
+                print('Carte Arduino non reconnue /nVeuillez vous connecter à l\'un des conductimètres reconnu par le programme', port)
         except :
             i += 1
             if i >= len(ports) :
@@ -67,6 +68,25 @@ def port_connexion(br = 9600 , portIN = '') :
                 conn = True
             pass     
     return port , s
+
+def setup():
+    """
+    Paramètre d'initialisation de la carte Arduino.
+
+    Returns
+    -------
+    arduino : TYPE
+        Localisation de la carte arduino du conductimètre.
+
+    """
+    try:
+        arduino = serial.Serial(port= port_connexion(), baudrate = 115200, timeout = 5)
+        time.sleep(1)  # Laisser le temps à l'Arduino
+        arduino.reset_input_buffer()
+        return arduino
+    except Exception as e:
+        print(f"Erreur de connexion à l'Arduino : {e}")
+        return None
     
     
     
@@ -134,13 +154,33 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
         print('/!\ Saisie invalide.')
     return portIN , s, br , nb_inter , time_inter
  
+    
+def setup():
+     """
+     Paramètre d'initialisation de la carte Arduino.
+
+     Returns
+     -------
+     arduino : TYPE
+         Localisation de la carte arduino du conductimètre.
+
+     """
+     try:
+         arduino = serial.Serial(port= port_connexion()[0], baudrate = 115200, timeout = 5)
+         time.sleep(1)  # Laisser le temps à l'Arduino
+         arduino.reset_input_buffer()
+         return arduino
+     except Exception as e:
+         print(f"Erreur de connexion à l'Arduino : {e}")
+         return None
+    
 #########################################################
 #
 # FONCTIONS DE CALIBRATION 
 #
 #########################################################
 
-def mesure_etalonnage(nbr_mesure_par_etalon,port_test):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
+def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
     '''
     Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu'elles sont stables'
 
