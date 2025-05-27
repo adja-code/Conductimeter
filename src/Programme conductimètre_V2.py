@@ -1,4 +1,6 @@
-from lib_conductimetre import port_connexion()
+import sys
+sys.path.append(".")
+from lib_conductimetre import *
 
 
 

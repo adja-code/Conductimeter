@@ -37,8 +37,8 @@ def port_connexion(br = 9600 , portIN = '') :
 
     """
 
-    arduino_list=['0x7fa89e971690']
-#remplacer par la liste des numéros de série des cartes arduinos des conductimètres 
+    arduino_list=['7513931383135170A031','85138313034351818222','85138313633351403151','751393138313510190A0','9513832383835190A231','7513131393235121B0A1','75131313932351F08160','7513931383135110A2D1','75131313932351403012']
+    #Dans l'ordre[ADNI,LOTHI,GAGAMA,BALEW,MAJUCA,AMPAPI,SOMA,ANRE,GUITERA]
     if portIN == '' :
         ports = list(serial.tools.list_ports.comports())
     else :
@@ -56,7 +56,6 @@ def port_connexion(br = 9600 , portIN = '') :
                 conn = True  
                 print('Connexion établie avec le port', port)
             else :
-                s = serial.Serial(port=port, baudrate=br, timeout=5)
                 conn = False
                 print('Carte Arduino non reconnue /nVeuillez vous connecter à l\'un des conductimètres reconnu par le programme', port)
         except :
@@ -66,8 +65,9 @@ def port_connexion(br = 9600 , portIN = '') :
                 s = 'error' 
                 portIN = '' 
                 conn = True
-            pass     
-    return port , s
+            pass    
+    print(s)
+    return port
 
 def setup():
     """
@@ -166,7 +166,7 @@ def setup():
 
      """
      try:
-         arduino = serial.Serial(port= port_connexion()[0], baudrate = 115200, timeout = 5)
+         arduino = serial.Serial(port= port_connexion(), baudrate = 115200, timeout = 5)
          time.sleep(1)  # Laisser le temps à l'Arduino
          arduino.reset_input_buffer()
          return arduino
@@ -337,9 +337,9 @@ def default_calibration() :
     reg5000 = np.polyfit(Temperature,Conductivite_5000,1)
     droite_5000 = np.poly1d(reg5000)
      
-    Conductivite[1]= droite_12880(20)#remplacer 20 par la température moyenne de la salle dans laquelle s'effectue les manips 
-    Conductivite[2]= droite_5000(20)
-    Conductivite[3]= droite_1413(20)
+    Conductivite[0]= droite_12880(20)#remplacer 20 par la température moyenne de la salle dans laquelle s'effectue les manips 
+    Conductivite[1]= droite_5000(20)
+    Conductivite[2]= droite_1413(20)
      
     reg = np.polyfit(Tension,Conductivite_12880,1)
     droite= np.poly1d(reg)
