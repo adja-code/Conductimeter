@@ -19,6 +19,18 @@ def accueil():
     #Initialisation des valeurs par défaut
     nbr_mesure_par_echantillon = 100 
     nbr_mesure_par_etalon = 200
+    interface_acceuil="""
+===========================================================================
+ACCEUIL
+===========================================================================
+Que voulez-vous faire ? :
+1 - Etalonner le conductimètre 
+2 - Mesurer la conductivité d'une solution
+3 - Modifier les valeurs par défaut 
+4 - Quitter
+===========================================================================
+Votre réponse >>> 
+? """
 
     try : 
         droite = np.loadtxt("./dernier_étalonnage.csv", delimiter = ';')
@@ -31,19 +43,21 @@ def accueil():
         print('- Vous avez fini le calibrage.')
         
     while(True) : 
-        reponse = input('\nQue voulez vous faire ?\n1 : Mesures \n2 : Nouvel étalonnage\n3 : Modifier les valeurs par défaut\n4 : Quitter\nVotre réponse : ')
+        reponse = input(interface_acceuil)
         droite = np.loadtxt("./dernier_étalonnage.csv", delimiter = ';')
         
-        if reponse == '1' : # Mesures
-            nbr_echantillon = int(input('Combien d\'échantillons voulez-vous mesurer ? : '))
-            Mesures(nbr_echantillon, droite, nbr_mesure_par_echantillon)
-            print('- Vous avez fini vos mesures.\n')
-            
-        elif reponse == '2' : # Calibrage
+        if reponse == '1' : # Calibrage
             nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
             droite = Etalonnage(nbr_etalon, nbr_mesure_par_etalon)
             np.savetxt('./dernier_étalonnage.csv', droite, delimiter = ';', header = 'Droite étalonnage')
             print('- Vous avez fini le calibrage.\n')
+        
+        elif reponse == '2' : # Mesures
+            nbr_echantillon = int(input('Combien d\'échantillons voulez-vous mesurer ? : '))
+            Mesures(nbr_echantillon, droite, nbr_mesure_par_echantillon)
+            print('- Vous avez fini vos mesures.\n')
+            
+      
             
         elif reponse == '3' : # Modification des valeurs par défaut
             choix_modif = input('\nQuelle valeur voulez-vous modifier ?\n1 : Nombre de valeurs par échantillon\n2 : Nombre de valeurs par étalon\nVotre réponse : ')
@@ -209,7 +223,6 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
     conductimeter = setup()
     list_tension = []
     list_conductivite=[]
-    
     #Correction de la conductivité par la température 
     Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]

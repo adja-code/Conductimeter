@@ -149,7 +149,7 @@ def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage
         Liste des tensions mesurées pendant l'étalonnage.
 
     '''
-    conductimeter = fn_settings()
+    conductimeter = port_connexion()[1]
     list_tension_etalon = []
     numerotation = []
     print('Les mesures sont en cours, attendez s\'il vous plait.')
@@ -168,8 +168,7 @@ def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage
     return list_tension_etalon
 
 
-
-def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
+def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=200):
     '''
     Fonction qui, pour le nombre d'étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tension et conductivité, puis trace le graphique et renvoie la droite d'étalonnage
 
@@ -186,50 +185,16 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
         Droite d'étalonnage sous la forme ax + b.
 
     '''
-    conductimeter = setup()
+    conductimeter = port_connexion()[1]
     list_tension = []
     list_conductivite=[]
     
-    #Correction de la conductivité par la température 
-    Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
-    Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
-    Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
-    Conductivite_5000 = [2760,3180,3615,4063,4155,4245,4337,4429,4523,4617,4711,4805,4902,5000,5096,5190,5286,5383,5479,5575]
-
-    reg_12880 = np.polyfit(Temperature,Conductivite_12880,1)
-    droite_12880 = np.poly1d(reg_12880)
-
-    reg_1413= np.polyfit(Temperature,Conductivite_1413,1)
-    droite_1413 = np.poly1d(reg_1413)
-
-    reg_5000= np.polyfit(Temperature,Conductivite_5000,1)
     droite_5000 = np.poly1d(reg_5000)
     
     for k in range(nbr_etalon):
         print('\n[ Étalon', k+1,']')
         
         conductivite = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en uS/cm): '))
-        if conductivite == 12880 :
-            print('Remarque : Votre mesure sera corrigée avec la température mesurée dans l\'échantillon pour plus de précision.')
-            input('Appuyez sur Entrée après avoir plongé le thermomètre dans la solution.')
-            lect = conductimeter.readline().decode().strip('\r\n').split(',')
-            T = float(lect[0])
-            conductivite = droite_12880(T)
-        elif conductivite == 5000 :
-            print('Remarque : Votre mesure sera corrigée avec la température mesurée dans l\'échantillon pour plus de précision.')
-            input('Appuyez sur Entrée après avoir plongé le thermomètre dans la solution.')
-            lect = conductimeter.readline().decode().strip('\r\n').split(',')
-            T = float(lect[0])
-            conductivite = droite_5000(T)
-        elif conductivite == 1413 :
-            print('Remarque : Votre mesure sera corrigée avec la température mesurée dans l\'échantillon pour plus de précision.')
-            input('Appuyez sur Entrée après avoir plongé le thermomètre dans la solution.')
-            lect = conductimeter.readline().decode().strip('\r\n').split(',')
-            T = float(lect[0])
-            conductivite = droite_1413(T)
-        else : 
-            print('Remarque : Votre mesure ne pourra pas être corrigée selon la température.')
-            
         input('\nAppuyez sur Entrée pour lancer la mesure.')
         list_conductivite.append(conductivite)
         list_tension_etalonnage = mesure_etalonnage(nbr_mesure_par_etalon)
@@ -237,7 +202,6 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
         print('L\'écart-type des mesures de l\'étalon est :', ecart_type,'V, un graphique s\'est aussi affiché.')
         a = input('\nEst ce que la mesure est stable ? (y/n) : ')
         moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
-        print('La conductivité de votre étalon est de', conductivite, ' uS/cm avec une tension enregistrée de ', moy_etalon, 'V pour une température de', T, '°C.')
         list_tension.append(float(moy_etalon))
         print('Cette mesure est enregistrée, passez à la suite.\n')
 
@@ -252,7 +216,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
     plt.plot(list_tension, droite[1] * np.array(list_tension) + droite[0])
     plt.show()
     
-    return droite
+    return droite #renvoie f(conductivite à 25°)=tension
     
 def Etalonnage_existant():
     cali_dispo = sorted(glob.glob('./Nextcloud/Conductimetre/data/*12880*.csv'), key=os.path.getmtime)
@@ -305,6 +269,94 @@ def default_calibration() :
     plt.title('Courbe d\'étalonnage par défaut')
     
     return droite
+
+################################################################################
+#
+# FONCTIONS DE MESURE DE CONDUCTIVITÉ
+#
+################################################################################
+def Mesures(nbr_echantillon, nbr_mesure_par_echantillon=100):
+    """
+    Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.
+
+    Parameters
+    ----------
+    nbr_echantillon : int
+        Nombre d'échantillons à mesurer dans la série.
+    droite : numpy.poly1d
+        Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.
+    nbr_mesure_par_echantillon : int
+        Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.
+        
+    Returns
+    -------
+    None.
+
+    """
+    conductimeter = port_connexion()[1]
+    list_temp = []
+    list_conductivite = []
+    numerotation = []
+    donnees = []
+    droite=Etalonnage()
+    
+    for k in range(nbr_echantillon):
+        print('\n[ Échantillon',k+1,']')
+        input('Veuillez préparer votre échantillon, puis appuyer sur Entrée pour lancer la mesure.')
+        print('Vos mesures sont en cours, patientez s\'il vous plait.')
+        conductimeter.flushInput()
+        for i in range(nbr_mesure_par_echantillon): 
+            data = conductimeter.readline().decode().strip('\r\n').split(',')
+            list_temp.append(float(data[0]))
+            list_conductivite.append(droite(float(data[0])))
+            numerotation.append(k*0.01)
+            time.sleep(0.01)
+        list_conductivite_corrigees= correction_temperature(np.array(list_conductivite))
+        conductivite_corrigee=np.mean(list_conductivite)
+        print('-> Resultat : La température moyenne est : ', np.mean(list_temp), '°C, et la conductivité moyenne est de : ', np.mean(list_conductivite),'uS/cm.')
+        donnees.append([k, np.mean(list_temp), np.mean(list_conductivite)])
+    np.savetxt('./data_conductivité.csv', donnees, delimiter = ';',fmt = '%.2f', header='Mesure n°;Température(°C);Conductivité(uS/cm)',)
+    print('Vos mesures sont désormais stockées dans le fichier data_conductivité.csv.\nAttention, si vous ne modifiez pas le nom du fichier, elles seront écrasées à la prochaine série de mesures.\n')
+    return 
+
+#################################################################################
+#
+# CORRECTION DE TEMPERATURE
+#
+#################################################################################
+
+def correction_temperature(conductivite_25):
+    conductimeter= port_connexion()[1]
+    Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+    Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
+    Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
+    Conductivite_5000 = [2760,3180,3615,4063,4155,4245,4337,4429,4523,4617,4711,4805,4902,5000,5096,5190,5286,5383,5479,5575]
+
+    reg_12880 = np.polyfit(Temperature,Conductivite_12880,1)
+    droite_12880 = np.poly1d(reg_12880)
+    
+    reg_1413= np.polyfit(Temperature,Conductivite_1413,1)
+    droite_1413 = np.poly1d(reg_1413)
+
+    reg_5000= np.polyfit(Temperature,Conductivite_5000,1)
+    droite_5000 = np.poly1d(reg_5000)
+
+    Conductivite=[12880,5000,1413]
+    Coefficient_directeur=[droite_12880[1],droite_5000[1],droite_1413[1]]
+
+    reg=np.polyfit(Conductivite,Coefficient_directeur,1)
+    alpha=reg[0]
+    
+    list_temp =[] #liste pour relever la température moyenne de la solution
+    conductimeter.flushInput()
+    for i in range(100): 
+        data = conductimeter.readline().decode().strip('\r\n').split(',')
+        list_temp.append(data[0])
+    Temperature_echantillon= np.mean(list_temp)
+    
+    conductivite_corrige=alpha*conductivite_25*Temperature_echantillon
+    
+    return conductivite_corrige
 
 
 
