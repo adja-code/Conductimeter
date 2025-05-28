@@ -66,31 +66,12 @@ def port_connexion(br = 9600 , portIN = '') :
                 portIN = '' 
                 conn = True
             pass    
-    print(s)
-    return port
+    return port,s
 
-def setup():
-    """
-    Paramètre d'initialisation de la carte Arduino.
-
-    Returns
-    -------
-    arduino : TYPE
-        Localisation de la carte arduino du conductimètre.
-
-    """
-    try:
-        arduino = serial.Serial(port= port_connexion(), baudrate = 115200, timeout = 5)
-        time.sleep(1)  # Laisser le temps à l'Arduino
-        arduino.reset_input_buffer()
-        return arduino
-    except Exception as e:
-        print(f"Erreur de connexion à l'Arduino : {e}")
-        return None
     
     
     
-def fn_settings(portIN , s , br , nb_inter , time_inter) :
+def fn_settings(portIN='',br =9600, nb_inter =100, time_inter=5) :
     """
     Configuration des paramètres modifiables par l'utilisateur.
 
@@ -98,8 +79,6 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
     ----------
     portIN : string
         Identifiant du port série sur lequel le script doit lire des données.
-    s : serial.tools.list_ports_common.ListPortInfo
-        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié.
     br : int
         Flux de données en baud.
     nb_inter : int
@@ -109,8 +88,6 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
 
     Returns
     -------
-    portIN : string
-        Identifiant du port série sur lequel le script doit lire des données.
     s : serial.tools.list_ports_common.ListPortInfo
         Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié.
     br : int 
@@ -122,21 +99,13 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
 
     """
     
-    print("Configurer le port de connexion : P \nChanger le flux (baudrate) : B \nChanger le temps et la fréquence de mesure : T")
+    print(" Le flux (baudrate) actuel vaut 9600, le temps entre chaque mesure vaut 1s et la fréquence vaut 5 Hz.\nVoulez-vous ? : \n\nChanger le flux (baudrate) : B \nChanger le temps et la fréquence de mesure : T \nNe rien faire : N " )
     setting = input('>>> ')
-    if setting == 'P' or setting == 'p':
-        print('Saisissez le chemin du port (pour tester toutes les connexions périphériques de l\'ordinateur, laissez le champ vide)')
-        port_name = input('>>> ')
-        try :
-            portIN , s = port_connexion(br, port_name)
-        except Exception as inst :
-            print("/!\ Echec de l'opération.")
-            print('Erreur :',inst)
-            pass
-    elif setting == 'B' or setting == 'b' :
+    
+    if setting == 'B' or setting == 'b' :
         try :
             br = int(input('Saisissez le nouveau baudrate : '))
-            portIN , s = port_connexion(br, portIN)
+            portIN= port_connexion(br, portIN)[0]
             print('Paramètre enregistré.')
         except :
             print('/!\ Saisie invalide.')
@@ -150,30 +119,15 @@ def fn_settings(portIN , s , br , nb_inter , time_inter) :
         except :
             print('/!\ Saisie invalide.')
             pass
+    elif setting == 'N' or setting == 'n' :
+        pass
     else :
         print('/!\ Saisie invalide.')
-    return portIN , s, br , nb_inter , time_inter
+    return port_connexion(br,portIN)[1]
+   
  
     
-def setup():
-     """
-     Paramètre d'initialisation de la carte Arduino.
 
-     Returns
-     -------
-     arduino : TYPE
-         Localisation de la carte arduino du conductimètre.
-
-     """
-     try:
-         arduino = serial.Serial(port= port_connexion(), baudrate = 115200, timeout = 5)
-         time.sleep(1)  # Laisser le temps à l'Arduino
-         arduino.reset_input_buffer()
-         return arduino
-     except Exception as e:
-         print(f"Erreur de connexion à l'Arduino : {e}")
-         return None
-    
 #########################################################
 #
 # FONCTIONS DE CALIBRATION 
@@ -195,7 +149,7 @@ def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage
         Liste des tensions mesurées pendant l'étalonnage.
 
     '''
-    conductimeter = setup()
+    conductimeter = fn_settings()
     list_tension_etalon = []
     numerotation = []
     print('Les mesures sont en cours, attendez s\'il vous plait.')

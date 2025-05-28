@@ -38,7 +38,7 @@ if __name__ == '__main__':
     continuer = True
     calib3 = False
     continuer_calib = True
-    default_model = default_Calibration()
+    default_model = default_calibration()
     while continuer:
         
         x = input (interface)
