@@ -17,7 +17,7 @@ from sklearn.metrics import r2_score
 #
 ###############################################
 
-def port_connexion(br = 9600 , portIN = '') :
+def port_connexion(br = 115200 , portIN = '') :
     """
     Établit la connexion au port série.
 
@@ -54,7 +54,7 @@ def port_connexion(br = 9600 , portIN = '') :
                 port = (port).replace('cu','tty')
                 s = serial.Serial(port=port, baudrate=br, timeout=5) 
                 conn = True  
-                print('Connexion établie avec le port', port)
+               # print('Connexion établie avec le port', port)
             else :
                 conn = False
                 print('Carte Arduino non reconnue /nVeuillez vous connecter à l\'un des conductimètres reconnu par le programme', port)
@@ -152,23 +152,33 @@ def mesure_etalonnage(nbr_mesure_par_etalon):   # confirmation que l'étalonnage
     conductimeter = port_connexion()[1]
     list_tension_etalon = []
     numerotation = []
+    date_today= datetime.now()
+    date=date_today.strftime("%d-%m-%y")
+    #date=t.replace(microsecond=0)
     print('Les mesures sont en cours, attendez s\'il vous plait.')
     conductimeter.flushInput()
     for k in range(nbr_mesure_par_etalon):
         lect = conductimeter.readline().decode().strip('\r\n').split(',')
         list_tension_etalon.append(float(lect[1]))
         numerotation.append(k*0.01)
-        time.sleep(0.01)
+        #time.sleep(0.0readline().decode().strip('\r\n').split(',')
+        
+    np.savetxt('./tension_etalonnage du %s.csv' %date,list_tension_etalon, delimiter = ';',fmt = '%.2f', header='Tensions mesurées par la sonde conductimétrique',)
+    print('Vos mesures sont désormais stockées dans le fichier tension_etalonnage.csv')
+  
     plt.figure()
     plt.plot(numerotation, list_tension_etalon, 'o')
     plt.xlabel('Temps (s)')
     plt.ylabel('Tension (V)')
     plt.show()
     
+    
+    
+    
     return list_tension_etalon
 
 
-def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=200):
+def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=50):
     '''
     Fonction qui, pour le nombre d'étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tension et conductivité, puis trace le graphique et renvoie la droite d'étalonnage
 
@@ -186,10 +196,10 @@ def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=200):
 
     '''
     conductimeter = port_connexion()[1]
-    list_tension = []
-    list_conductivite=[]
+    list_tension = [0]
+    list_conductivite=[0]
     
-    droite_5000 = np.poly1d(reg_5000)
+
     
     for k in range(nbr_etalon):
         print('\n[ Étalon', k+1,']')
@@ -204,7 +214,8 @@ def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=200):
         moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
         list_tension.append(float(moy_etalon))
         print('Cette mesure est enregistrée, passez à la suite.\n')
-
+    
+    
     plt.figure()
     plt.plot(list_tension,list_conductivite, 'o', color = 'r')
     plt.xlabel('Tension (V)')
@@ -216,6 +227,7 @@ def Etalonnage(nbr_etalon=2, nbr_mesure_par_etalon=200):
     plt.plot(list_tension, droite[1] * np.array(list_tension) + droite[0])
     plt.show()
     
+    np.savetxt('étalonnage du %s.csv' %date, droite, delimiter = ';', header = 'Droite étalonnage du %s' %date)
     return droite #renvoie f(conductivite à 25°)=tension
     
 def Etalonnage_existant():
@@ -275,7 +287,7 @@ def default_calibration() :
 # FONCTIONS DE MESURE DE CONDUCTIVITÉ
 #
 ################################################################################
-def Mesures(nbr_echantillon, nbr_mesure_par_echantillon=100):
+def Mesures(nbr_echantillon,droite, nbr_mesure_par_echantillon=100):
     """
     Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.
 
@@ -298,7 +310,6 @@ def Mesures(nbr_echantillon, nbr_mesure_par_echantillon=100):
     list_conductivite = []
     numerotation = []
     donnees = []
-    droite=Etalonnage()
     
     for k in range(nbr_echantillon):
         print('\n[ Échantillon',k+1,']')
