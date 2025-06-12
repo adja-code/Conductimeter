@@ -15,18 +15,18 @@ void setup() {
   Serial.begin(115200);
 //  Serial.println("Adafruit MAX31865 PT100 Sensor Test!");
 
-  thermo.begin(MAX31865_2WIRE);  // set to 2WIRE or 4WIRE as necessary
+  thermo.begin(MAX31865_4WIRE);  // set to 2WIRE or 4WIRE as necessary
 }
 
-s
+
 void loop() {
  //int tension = analogRead(A0);
   float tension = analogRead(A0)* 5.0 / 1023.0 ;
   uint16_t rtd = thermo.readRTD();
   Serial.print(thermo.temperature(RNOMINAL, RREF));
   Serial.print(",");
-  //Serial.print(tension);
-  //Serial.print(",");
   Serial.println(tension);
+  //Serial.println(",");
+  //Serial.print(tension);
   delay(10 );
 }

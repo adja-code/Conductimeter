@@ -32,6 +32,8 @@ Que voulez-vous faire ? :
 Votre réponse >>> 
 ? """
 
+    
+
     try : 
         droite = np.loadtxt("./dernier_étalonnage.csv", delimiter = ';')
         print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.')
@@ -269,7 +271,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
         ecart_type = np.std(list_tension_etalonnage)
         print('L\'écart-type des mesures de l\'étalon est :', ecart_type,'V, un graphique s\'est aussi affiché.')
         a = input('\nEst ce que la mesure est stable ? (y/n) : ')
-        moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
+        moy_etalon = stabilite_mesure(a, nbr_mesure_par_etalon)
         print('La conductivité de votre étalon est de', conductivite, ' uS/cm avec une tension enregistrée de ', moy_etalon, 'V pour une température de', T, '°C.')
         list_tension.append(float(moy_etalon))
         print('Cette mesure est enregistrée, passez à la suite.\n')

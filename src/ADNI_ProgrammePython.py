@@ -274,7 +274,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon):
 
 
 
-def stabilite_mesure(a, nbr_mesure_par_etalon): 
+def stabilite_mesure(a,list_tension_etalonnage, nbr_mesure_par_etalon): 
     while a == 'n' : 
         list_tension_etalonnage = mesure_etalonnage(nbr_mesure_par_etalon)
         ecart_type = np.std(list_tension_etalonnage)

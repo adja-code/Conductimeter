@@ -7,41 +7,15 @@ from lib_conductimetre import *
 if __name__ == '__main__':
 
     plt.ion() 
+    nbr_mesure_par_echantillon = 100 
+    nbr_mesure_par_etalon = 200
+    port, conductimeter = port_connexion()
+   
 
-    try:
-        port, s = port_connexion()
-        print(" conductimètre connecté  au port %s" % (port))
-    except:
-        print("Attention aucun arduino disponible")
     
-    interface ="""
-    ===========================================================================
-    MENU PRINCIPAL
-    ===========================================================================
-    Que souhaitez-vous faire ?
-    1 - Calibrer
-    2 - Mesurer
-    3 - Représenter graphiquement
-    4 - Quitter
-    ===========================================================================
-    ? """
-    
-    
-    
-##################################################################
-#
-# A ADAPTER AU CONDUCTIMETRE 
-#
-##################################################################
 
-    """
-    Fonction d'accueil du conductimètre, lance le programme complet.'
 
-    Returns
-    -------
-    None.
-
-    """
+    
     
     #Initialisation des valeurs par défaut
     nbr_mesure_par_echantillon = 100 
@@ -56,7 +30,7 @@ if __name__ == '__main__':
     3 - Modifier les valeurs par défaut 
     4 - Quitter
     ===========================================================================
-    Votre réponse >>> ? """
+    Votre réponse >>> """
     
     interface_calibration ="""
     ===========================================================================
@@ -67,7 +41,7 @@ if __name__ == '__main__':
     2 - Utiliser un étalonnage par défaut 
     3 - Quitter
     ===========================================================================
-    Votre réponse >>> ? """
+    Votre réponse >>> """
     
     interface_type_etalonnage="""
     ===========================================================================
@@ -76,7 +50,17 @@ if __name__ == '__main__':
     1 - Utiliser l'étalonnage le plus récent
     2 - Choisir un étalonnage particulier en fonction de son nombre d'é'
     ===========================================================================
-    Votre réponse >>> ? """
+    Votre réponse >>> """
+    
+    interface_mesure="""
+    ===========================================================================
+    Que souhaitez-vous faire ?
+    ===========================================================================
+    1 - Utiliser l'étalonnage le plus récent
+    2 - Retournez à l'acceuil afin d'effectuer un nouvel étalonnage 
+    ===========================================================================
+    Votre réponse >>> 
+    """
         
     while(True) : 
         reponse = input(interface_acceuil)
@@ -85,14 +69,14 @@ if __name__ == '__main__':
             choix_calib=int(input(interface_calibration))
             if choix_calib==1 : 
                 nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 1) : "))
-                droite_etalonnage= Etalonnage(nbr_etalon, nbr_mesure_par_etalon)
+                K= Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
                 print('- Vous avez fini le calibrage.\n')
             elif choix_calib==2:
                 type_etalonnage=int(input(interface_type_etalonnage))
                 if type_etalonnage==1:
-                    print("Utilisation du dernier étalonnage en date ") #A remplacer par le chargement du dernier coefficient a
+                    K = np.loadtxt("../data/dernier_etalonnage.csv", delimiter = ';',skiprows=1)
                 elif type_etalonnage==2:
-                    nombre_etalons=int(input('Vous souhaitez charger un étalonnage avec combien de solutions étalons'))
+                    nombre_etalons=int(input('Vous souhaitez charger un étalonnage avec combien de solutions étalons ?'))
                     print('Par défaut nous chargerons l\'étalonnage le plus récent') # A modifier par l'etalonnage le plus récent 
             elif choix_calib == '3' : # Arret du programme
                 print('- Merci, et bonne journée !')
@@ -105,8 +89,16 @@ if __name__ == '__main__':
                     
             
         elif reponse == '2' : # Mesures
+            try : 
+                K= np.loadtxt("../data/dernier_etalonnage.csv", delimiter = ';',skiprows=1)
+                print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.')
+            except Exception :
+                print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
+                nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
+                K = Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
+                print('- Vous avez fini le calibrage.')
             nbr_echantillon = int(input('Combien d\'échantillons voulez-vous mesurer ? : '))
-            Mesures(nbr_echantillon, droite, nbr_mesure_par_echantillon)
+            Mesures(nbr_echantillon, K, nbr_mesure_par_echantillon,conductimeter)
             print('- Vous avez fini vos mesures.\n')
             
         elif reponse == '3' : # Modification des valeurs par défaut
