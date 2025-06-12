@@ -147,7 +147,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
         Droite d'étalonnage sous la forme ax + b.
 
     '''
-
+    donnees=[]
     list_tension = []
     list_temp=[]
     list_conductivite=[]
@@ -162,7 +162,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
         
         conductivite = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en uS/cm): '))
         input('\nAppuyez sur Entrée pour lancer la mesure.')
-        list_conductivite_25.append(conductivite)
+        conductivite_25=conductivite
         Tension_etalon,temperature = mesure_etalonnage(nbr_mesure_par_etalon,conductimeter)
         conductivite, alpha= correction_temperature_etalonnage(conductivite,temperature)
         # print('La conductivité de votre étalon a été corrigée en tenant compte de la température. \nLa conductivité de votre solution étalon vaut :',conductivite,'\nAvec une température moyenne de',temperature,'°C')
@@ -181,6 +181,7 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
         # moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
         # list_tension.append(float(moy_etalon))
         print('Cette mesure est enregistrée, passez à la suite.\n')
+        donnees.append([numerotation,temperature,Tension_etalon,conductivite,conductivite_25])
         
     K = np.mean(list_conductivite)/np.mean(list_tension)#Constante de cellule supposée indépendante de la température. 
     K_reg= np.polyfit(list_tension,list_conductivite,1)[0]
@@ -190,13 +191,17 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
     
     print('\n L\'écart entre ces deux constantes vaut :',np.absolute(K_reg-K))
     
-    np.savetxt('../data/data_etalonnage/dernier_etalonnage.csv',np.array([K]),header='Constante de Cellule K du dernier étalonnage')
+    #Calcul coefficient de corrélation linéaire 
+    R_carre= np.square(np.corrcoef(list_tension,list_conductivite))
+    print ('R**2 =',R_carre)
+    
+    np.savetxt('../data/data_etalonnage/dernier_etalonnage.csv',[K,R_carre],header='Constante de Cellule K du dernier étalonnage')
     np.savetxt('../data/data_etalonnage/dernier_etalonnage_polyfit.csv',np.array([K_reg]),header='Constante de Cellule K_reg du dernier étalonnage')
-    np.savetxt('../data/data_etalonnage/tension_etalonnage du %s.csv' %date,np.array([numerotation,list_temp,list_tension,list_conductivite,list_conductivite_25]), delimiter = ';',fmt = '%.2f', header='Étalon n°;Température de l\'échantillon (°C);Tension mesurée par le conductimètre (V);Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm)')
-    print('Vos mesures sont désormais stockées dans le fichier tension_etalonnage.csv')    
+    np.savetxt('../data/data_etalonnage/donnees_etalonnage %s.csv' %date,donnees, delimiter = ';',fmt = '%.2f', header='Étalon n°;Température de l\'échantillon (°C);Tension mesurée par le conductimètre (V);Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm)')
+    print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage %s.csv'%date)    
     
     #Calcul coefficient de corrélation linéaire 
-    R_carre= np.square(np.corrcoef(np.array(list_tension),np.array(list_conductivite)))
+    R_carre= np.square(np.corrcoef(list_tension,list_conductivite))
     print ('R**2 =',R_carre)
     
     if nbr_etalon==1:
@@ -301,7 +306,7 @@ def Mesures(nbr_echantillon,K,nbr_mesure_par_echantillon,conductimeter):#
     date= datetime.now()
     date=date.replace(second=0,microsecond=0)
     
-    np.savetxt('../data/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm)')
+    np.savetxt('../data/mesures/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm)')
     print('Vos mesures sont désormais stockées dans le fichier data_conductivite.csv.\nAttention, si vous ne modifiez pas le nom du fichier, elles seront écrasées à la prochaine série de mesures.\n')
     return 
 
