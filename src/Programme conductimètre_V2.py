@@ -48,7 +48,7 @@ if __name__ == '__main__':
     Quel étalonnage par défaut 
     ===========================================================================
     1 - Utiliser l'étalonnage le plus récent
-    2 - Choisir un étalonnage particulier en fonction de son nombre d'é'
+    2 - Choisir un étalonnage particulier en fonction de sa date
     ===========================================================================
     Votre réponse >>> """
     
@@ -61,6 +61,7 @@ if __name__ == '__main__':
     ===========================================================================
     Votre réponse >>> 
     """
+    
         
     while(True) : 
         reponse = input(interface_acceuil)
@@ -74,10 +75,15 @@ if __name__ == '__main__':
             elif choix_calib==2:
                 type_etalonnage=int(input(interface_type_etalonnage))
                 if type_etalonnage==1:
-                    K = np.loadtxt("../data/dernier_etalonnage.csv", delimiter = ';',skiprows=1)
+                    type_conductimetre()
+                    if type_conductimetre()==1:
+                        K = np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv', delimiter = ';',skiprows=1)[0]
+                    elif type_conductimetre()==2:
+                        K = np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv', delimiter = ';',skiprows=1)[0]
+                        
                 elif type_etalonnage==2:
-                    nombre_etalons=int(input('Vous souhaitez charger un étalonnage avec combien de solutions étalons ?'))
-                    print('Par défaut nous chargerons l\'étalonnage le plus récent') # A modifier par l'etalonnage le plus récent 
+                    date=int(input(''))
+                    # A modifier
             elif choix_calib == '3' : # Arret du programme
                 print('- Merci, et bonne journée !')
                 break
@@ -90,8 +96,8 @@ if __name__ == '__main__':
             
         elif reponse == '2' : # Mesures
             try : 
-                K= np.loadtxt("../data/dernier_etalonnage.csv", delimiter = ';',skiprows=1)
-                print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.')
+                K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage.csv',usecols=0, delimiter = ';',skiprows=1)
+                print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
             except Exception :
                 print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
                 nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))

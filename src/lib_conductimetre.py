@@ -63,9 +63,36 @@ def port_connexion(br = 115200 , portIN = '') :
                 print("/!\ Port de connexion non détecté. Merci de rétablir la connexion non établie : connexion au processeur dans les réglages avant utilisation.")
                 s = 'error' 
                 portIN = '' 
-                conn = True
+                conn = False
             pass    
     return port,s
+
+
+def type_conductimetre(conductimeter):
+    type_sonde=0
+    conn= False
+    list_K1=['7513931383135170A031','75131313932351F08160','85138313034351818222','75131313932351403012','7513131393235121B0A1']
+    #['ADNI','SOMA','LOTHI','GUITERA','AMPAPI']
+    list_K10=['7513931383135110A2D1','9513832383835190A231','751393138313510190A0','85138313633351403151']
+    #['ANRE','MAJUCA','BALEW','GAGAMA']
+    while conn == False:
+        try :
+            port=list(serial.tools.list_ports.comports())[0]
+            if port.serial_number in list_K1:
+                type_sonde=1
+            elif port.serial_number in list_K10:
+                type_sonde=10
+            else :
+                print('Votre conductimètre n\'est pas reconnu, merci de vérifier les branchements')
+                conn = False
+        except Exception :
+            conn= False
+            pass
+        return type_sonde
+        
+        
+    
+    
 
 #########################################################
 #
@@ -73,7 +100,8 @@ def port_connexion(br = 115200 , portIN = '') :
 #
 #########################################################
 
-def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter):   # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
+def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter):
+    # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
     '''
     Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu'elles sont stables'
 
@@ -93,24 +121,24 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter):   # confirmation que
     numerotation = []
     date= datetime.now()
     date=date.replace(second=0,microsecond=0)
-    nbr_erreurs=0
+    
     
     print('Les mesures sont en cours, attendez s\'il vous plait.')
     conductimeter.flushInput()
     for k in range(nbr_mesure_par_etalon):
         lect = conductimeter.readline().decode().strip('\r\n').split(',')
         try :
+        # if float(lect[1]) != 0 :
             temperature=float(lect[0])
             tension=float(lect[1])
             list_tension_etalon.append(tension)
             list_temperature.append(temperature)
             numerotation.append(k*0.01)
+            print('Tension =',tension,'V',';','  Température =',temperature,'°C')
         except Exception:
-            nbr_erreurs+=1
-            time.sleep(1) #On constate qu'après une erreur de lecture il faut un certain temps avant de lire une mesure de tension exploitable. 
-        if nbr_erreurs>0:
-            print ('Le nombre de mesures par échantillon vaut :',nbr_mesure_par_etalon-nbr_erreurs)
-        nbr_erreurs=0
+            print('erreur')
+            pass
+          
         
         
     Temperature_etalon= np.mean(list_temperature)
@@ -154,7 +182,8 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
     date= datetime.now()
     date=date.replace(second=0,microsecond=0)
     list_conductivite_25=[]
-    numerotation=[]
+    numerotation=0
+    list_tension_25=[]
 
     
     for k in range(nbr_etalon):
@@ -165,13 +194,16 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
         conductivite_25=conductivite
         Tension_etalon,temperature = mesure_etalonnage(nbr_mesure_par_etalon,conductimeter)
         conductivite, alpha= correction_temperature_etalonnage(conductivite,temperature)
+        tension_25=Tension_etalon/(1+alpha*(temperature)-25)
         # print('La conductivité de votre étalon a été corrigée en tenant compte de la température. \nLa conductivité de votre solution étalon vaut :',conductivite,'\nAvec une température moyenne de',temperature,'°C')
         list_conductivite.append(conductivite)
+        list_conductivite_25.append(conductivite_25)
         list_temp.append(temperature)
         
         list_tension.append(Tension_etalon)
+        list_tension_25.append(tension_25)
         ecart_type = np.std(list_tension)
-        numerotation.append(k+1)
+        numerotation = k+1
         print('L\'écart-type des mesures de l\'étalon est :', ecart_type,'V, un graphique s\'est aussi affiché.')
         
    
@@ -181,40 +213,32 @@ def Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter):
         # moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
         # list_tension.append(float(moy_etalon))
         print('Cette mesure est enregistrée, passez à la suite.\n')
-        donnees.append([numerotation,temperature,Tension_etalon,conductivite,conductivite_25])
+        donnees.append([numerotation,temperature,Tension_etalon,tension_25,conductivite,conductivite_25])
         
-    K = np.mean(list_conductivite)/np.mean(list_tension)#Constante de cellule supposée indépendante de la température. 
-    K_reg= np.polyfit(list_tension,list_conductivite,1)[0]
+    K = np.sum(np.array(conductivite_25)*np.array(tension_25))/np.sum(np.square(np.array(tension_25)))#Methode des moindres carrés
     print('\nLa constante de cellule calculée à partir des moyennes vaut',K,'uS.V.cm-1')
-    
-    print('\nLa constante de cellule calculée à partir de polyfit vaut',K_reg,'uS.V.cm-1')
-    
-    print('\n L\'écart entre ces deux constantes vaut :',np.absolute(K_reg-K))
+    print(donnees)
     
     #Calcul coefficient de corrélation linéaire 
-    R_carre= np.square(np.corrcoef(list_tension,list_conductivite))
+    R_carre= np.square(np.corrcoef(list_tension_25,list_conductivite_25)[0,1])
     print ('R**2 =',R_carre)
     
-    np.savetxt('../data/data_etalonnage/dernier_etalonnage.csv',[K,R_carre],header='Constante de Cellule K du dernier étalonnage')
-    np.savetxt('../data/data_etalonnage/dernier_etalonnage_polyfit.csv',np.array([K_reg]),header='Constante de Cellule K_reg du dernier étalonnage')
-    np.savetxt('../data/data_etalonnage/donnees_etalonnage %s.csv' %date,donnees, delimiter = ';',fmt = '%.2f', header='Étalon n°;Température de l\'échantillon (°C);Tension mesurée par le conductimètre (V);Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm)')
+    np.savetxt('../data/data_etalonnage/dernier_etalonnage.csv',[[K,R_carre]], delimiter = ';',fmt = '%.2f',header="Constante de Cellule K du dernier étalonnage; Coefficient de correlation linéaire")
+    np.savetxt('../data/data_etalonnage/donnees_etalonnage %s.csv' % (date), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°;Température de l'échantillon (°C);Tension mesurée par le conductimètre (V);Tension à 25°C (V); Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm)")
     print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage %s.csv'%date)    
     
-    #Calcul coefficient de corrélation linéaire 
-    R_carre= np.square(np.corrcoef(list_tension,list_conductivite))
-    print ('R**2 =',R_carre)
     
     if nbr_etalon==1:
         list_tension.append(0)
         list_conductivite.append(0)
     #Graphique pour la droite d'étalonnage à température ambiante 
     plt.figure()
-    plt.plot(list_tension,list_conductivite, 'o', color = 'pink',label='Conductivité de la solution à temérature ambiante (us/cm)')
-    plt.plot(list_tension,list_conductivite_25, 'o', color = 'purple',label='Conductivité de la solution à 25 °C (us/cm)')
+    plt.plot(list_tension,list_conductivite, 'o', color = 'pink',label='Conductivité de la solution à température ambiante (us/cm)')
+    plt.plot(list_tension_25,list_conductivite_25, 'o', color = 'purple',label='Conductivité de la solution à 25 °C (us/cm)')
     # plt.plot(list_tension,K*np.array(list_tension),'--',color='r')
     plt.xlabel('Tension (V)')
     plt.ylabel('Conductivité (us/cm)')
-    plt.axis([0, np.max(list_tension), 0, np.max(list_conductivite) +5])
+    plt.axis([0, np.max(list_tension)+0.2, 0, np.max(list_conductivite) +1000])
     plt.legend()
     plt.title('Courbe d\'étalonnage du %s'%date)
     plt.savefig('../data/figures/Courbe d\'étalonnage du %s.png' %date)
@@ -270,7 +294,7 @@ def Mesures(nbr_echantillon,K,nbr_mesure_par_echantillon,conductimeter):#
     list_conductivite=[]
     list_temp=[]
     list_C25=[]
-    nbr_erreurs=0
+
     
     
     for k in range(nbr_echantillon):
@@ -281,21 +305,19 @@ def Mesures(nbr_echantillon,K,nbr_mesure_par_echantillon,conductimeter):#
         for i in range(nbr_mesure_par_echantillon): 
             data = conductimeter.readline().decode().strip('\r\n').split(',')
             try :
-                temperature=float(data[0])
-                tension=float(data[1])
-                alpha=correction_temperature_mesure(temperature,tension,K)[1]
-                conductivite=K*tension
-                list_conductivite.append(conductivite)
-                list_temp.append(temperature)
-                list_C25.append(conductivite/(alpha*(temperature-25)+1))
-               
+                if float(data[1]) != 0 :
+                    temperature=float(data[0])
+                    tension=float(data[1])
+                    alpha=correction_temperature_mesure(temperature,tension,K)[1]
+                    conductivite=K*tension
+                    list_conductivite.append(conductivite)
+                    list_temp.append(temperature)
+                    list_C25.append(conductivite/(alpha*(temperature-25)+1))
+                    print('Conductivité =',conductivite,'us/cm','  Température =',temperature,'°C')
+           
             except Exception:
-                nbr_erreurs+=1
-            if nbr_erreurs>0:
-                print (nbr_erreurs,'ont étées détectées')
-            
-            
-            
+                pass
+                    
                
         
         
@@ -306,8 +328,8 @@ def Mesures(nbr_echantillon,K,nbr_mesure_par_echantillon,conductimeter):#
     date= datetime.now()
     date=date.replace(second=0,microsecond=0)
     
-    np.savetxt('../data/mesures/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm)')
-    print('Vos mesures sont désormais stockées dans le fichier data_conductivite.csv.\nAttention, si vous ne modifiez pas le nom du fichier, elles seront écrasées à la prochaine série de mesures.\n')
+    np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm)')
+    print('Vos mesures sont désormais stockées dans le fichier data_conductivite du %s.csv.' %date)
     return 
 
 #################################################################################
