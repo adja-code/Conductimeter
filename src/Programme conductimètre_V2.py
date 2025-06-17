@@ -54,10 +54,10 @@ if __name__ == '__main__':
     
     interface_mesure="""
     ===========================================================================
-    Que souhaitez-vous faire ?
+    Souhaitez-vous mesurer la conductivité d'une autre solution
     ===========================================================================
-    1 - Utiliser l'étalonnage le plus récent
-    2 - Retournez à l'acceuil afin d'effectuer un nouvel étalonnage 
+     Y - Yes
+     N - No  
     ===========================================================================
     Votre réponse >>> 
     """
@@ -70,7 +70,7 @@ if __name__ == '__main__':
             choix_calib=int(input(interface_calibration))
             if choix_calib==1 : 
                 nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 1) : "))
-                K= Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
+                Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
                 print('- Vous avez fini le calibrage.\n')
             elif choix_calib==2:
                 type_etalonnage=int(input(interface_type_etalonnage))
@@ -96,17 +96,36 @@ if __name__ == '__main__':
             
         elif reponse == '2' : # Mesures
             try : 
-                K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage.csv',usecols=0, delimiter = ';',skiprows=1)
-                print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
+                type_conductimeter=type_conductimetre()
+                if type_conductimeter==1:
+                    K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1)
+                
+                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
+                elif type_conductimeter==10:
+                    K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',usecols=0, delimiter = ';',skiprows=1)
+                
+                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
             except Exception :
                 print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
                 nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
-                K = Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
+                K= Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
                 print('- Vous avez fini le calibrage.')
-            nbr_echantillon = int(input('Combien d\'échantillons voulez-vous mesurer ? : '))
-            Mesures(nbr_echantillon, K, nbr_mesure_par_echantillon,conductimeter)
-            print('- Vous avez fini vos mesures.\n')
             
+            mesure=True
+            k=0
+            while mesure :
+                k+=1
+                print('\n[ Échantillon %d]'%k)
+                Mesures(K, nbr_mesure_par_echantillon,conductimeter)
+                print('- Vous avez fini vos mesures.\n')
+                choix=input(interface_mesure)
+                if choix == 'y' or choix=='Y':
+                    mesure = True
+                elif choix=='n' or choix == 'N' : 
+                    mesure= False
+                else:
+                    print('Merci de répondre uniquement y ou n ')
+                    mesure=False
         elif reponse == '3' : # Modification des valeurs par défaut
             choix_modif = input('\nQuelle valeur voulez-vous modifier ?\n1 : Nombre de valeurs par échantillon\n2 : Nombre de valeurs par étalon\nVotre réponse : ')
             if choix_modif == '1' :
