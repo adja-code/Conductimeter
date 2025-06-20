@@ -10,6 +10,7 @@ if __name__ == '__main__':
     nbr_mesure_par_echantillon = 100 
     nbr_mesure_par_etalon = 200
     port, conductimeter = port_connexion()
+    type_conductimeter=type_conductimetre()
    
 
     
@@ -70,16 +71,19 @@ if __name__ == '__main__':
             choix_calib=int(input(interface_calibration))
             if choix_calib==1 : 
                 nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 1) : "))
-                Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
-                print('- Vous avez fini le calibrage.\n')
+                if type_conductimeter ==1:
+                   a= Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
+                   print('- Vous avez fini le calibrage.\n')
+                elif type_conductimeter==10:
+                    a,b=Etalonnage_K10(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
             elif choix_calib==2:
                 type_etalonnage=int(input(interface_type_etalonnage))
                 if type_etalonnage==1:
                     type_conductimetre()
                     if type_conductimetre()==1:
                         K = np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv', delimiter = ';',skiprows=1)[0]
-                    elif type_conductimetre()==2:
-                        K = np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv', delimiter = ';',skiprows=1)[0]
+                    elif type_conductimetre()==10:
+                        a = np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv', delimiter = ';',skiprows=1)[0]
                         
                 elif type_etalonnage==2:
                     date=int(input(''))
@@ -95,37 +99,56 @@ if __name__ == '__main__':
                     
             
         elif reponse == '2' : # Mesures
-            try : 
-                type_conductimeter=type_conductimetre()
-                if type_conductimeter==1:
-                    K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1)
-                
-                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
-                elif type_conductimeter==10:
-                    K= np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',usecols=0, delimiter = ';',skiprows=1)
-                
-                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur de la constante K vaut :',K)
-            except Exception :
-                print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
-                nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
-                K= Etalonnage(nbr_etalon, nbr_mesure_par_etalon,conductimeter)
-                print('- Vous avez fini le calibrage.')
+            if type_conductimeter==1:
+                try : 
+                    a= float(np.loadtxt('/home/dfed/Nextcloud/Conductimetre/data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1))
+                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur du coefficient directeur de la courbe d\'étalonnage vaut :',a)
+                except Exception :
+                    print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
+                    nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
+                    Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
+                    print('- Vous avez fini le calibrage.')
+            elif type_conductimeter==10:# except Exception :
+                    try : 
+                        a= float(np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',usecols=0, delimiter = ';',skiprows=1))
+                        b= float(np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',usecols=1, delimiter = ';',skiprows=1))
+                        print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLe coefficient directeur de la courbe d''vaut :',a,'L\'ordonnée à l\'origine vaut :',b)
+                    except Exception :
+                        print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
+                        nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
+                        Etalonnage_K10(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
+                        print('- Vous avez fini le calibrage.')
+                         
+            
+                    
+                    
+            
             
             mesure=True
-            k=0
+            k=1
+            donnees_moyennes=[]
             while mesure :
-                k+=1
+
                 print('\n[ Échantillon %d]'%k)
-                Mesures(K, nbr_mesure_par_echantillon,conductimeter)
-                print('- Vous avez fini vos mesures.\n')
+                if type_conductimeter ==1:
+                    conductivite,C25,temperature,date =Mesures_K1(a, nbr_mesure_par_echantillon,conductimeter)
+                    donnees_moyennes.append([k,conductivite,C25,temperature])
+                    print('- Vous avez fini vos mesures.\n')
+                elif type_conductimeter==10:
+                    conductivite,C25,temperature,date=Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter)
+                    donnees_moyennes.append([k,conductivite,C25,temperature])
                 choix=input(interface_mesure)
                 if choix == 'y' or choix=='Y':
                     mesure = True
+                    k+=1
                 elif choix=='n' or choix == 'N' : 
                     mesure= False
                 else:
                     print('Merci de répondre uniquement y ou n ')
                     mesure=False
+            np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees_moyennes, delimiter = ';',fmt = '%.2f', header='Mesure n°;Conductivité moyenne (uS/cm);Conductivité moyenne de l\'échantillon à 25°C (uS/cm)')
+                
+                    
         elif reponse == '3' : # Modification des valeurs par défaut
             choix_modif = input('\nQuelle valeur voulez-vous modifier ?\n1 : Nombre de valeurs par échantillon\n2 : Nombre de valeurs par étalon\nVotre réponse : ')
             if choix_modif == '1' :
