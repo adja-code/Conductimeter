@@ -102,7 +102,8 @@ if __name__ == '__main__':
             if type_conductimeter==1:
                 try : 
                     a= float(np.loadtxt('/home/dfed/Nextcloud/Conductimetre/data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1))
-                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur du coefficient directeur de la courbe d\'étalonnage vaut :',a)
+                    b= float(np.loadtxt('/home/dfed/Nextcloud/Conductimetre/data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=1, delimiter = ';',skiprows=1))
+                    print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur du coefficient directeur de la courbe d\'étalonnage vaut :',a,'L\'ordonnée à l\'origine vaut :',b)
                 except Exception :
                     print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
                     nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 3) : "))
@@ -131,7 +132,7 @@ if __name__ == '__main__':
 
                 print('\n[ Échantillon %d]'%k)
                 if type_conductimeter ==1:
-                    conductivite,C25,temperature,date =Mesures_K1(a, nbr_mesure_par_echantillon,conductimeter)
+                    conductivite,C25,temperature,date =Mesures_K1(a,b, nbr_mesure_par_echantillon,conductimeter)
                     donnees_moyennes.append([k,conductivite,C25,temperature])
                     print('- Vous avez fini vos mesures.\n')
                 elif type_conductimeter==10:
