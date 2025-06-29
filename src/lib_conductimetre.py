@@ -70,6 +70,14 @@ def port_connexion(br = 115200 , portIN = '') :
 
 
 def type_conductimetre():
+    """
+    Fonction qui détermine si le conductimètre possède une sonde de type K1 ou K10 en fonction du numéro de série de la carte arduino. 
+
+    Returns
+    -------
+    type_sonde : TYPE
+    Entier qui vaut 1 Si la sonde du conductimètre est de type K1 et 10 si la sonde est de type K10.
+    """
     type_sonde=0
     conn= False
     list_K1=['7513931383135170A031','75131313932351F08160','85138313034351818222','75131313932351403012','7513131393235121B0A1']
@@ -104,7 +112,7 @@ def type_conductimetre():
 def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter):
     # confirmation que l'étalonnage est bon en faisant pendant x min à haute fréquence des mesures puis en les mettant sur un graphique
     '''
-    Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu'elles sont stables'
+    Fonction permettant de faire une série de mesures à haute fréquence, et de la représenter sur un graphique 
 
     Parameters
     ----------
@@ -112,9 +120,24 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter
         nombre de mesures par étalon, décidé dans les valeurs par défaut.
 
     Returns
+    conductivite : int
+        Conductivité moyenne à température ambiante 
+    Ecart_type_conductivite : int
+        Ecart-type associé à la valeur de conductivite moyenne
+    
+    Tension_etalon  : int
+    Tension moyenne mesurée à température ambiante 
+    
+    Ecart_type_tension : int
+        Ecart_type associé à la valeure de tension mesurée en dortie de la sonde conductimétrique.
+    Temperature_etalon: int
+        Température moyenne de la solution
+    Ecart_type_temperature : int 
+        Écart type associé à la valeur moyenne de conductivité.
+    alpha : int 
+        Coefficient de correction de tepérature à 25 °C calculé à partir des données présentes sur les solutions tampons Hanna Instruments
     -------
-    list_tension_etalon : list
-        Liste des tensions mesurées pendant l'étalonnage.
+   
 
     '''
     donnees=[]
@@ -180,19 +203,26 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter
 
 def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter):
     '''
-    Fonction qui, pour le nombre d'étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tension et conductivité, puis trace le graphique et renvoie la droite d'étalonnage
+    Fonction qui permet d'étalonner les sondes de type K10 grâce à une régression polyfit si le nombre d'étalons vaut 2  ou gâce à la méthode des moindres carrés et qui enregistre les données automatiquement dans un fichier en format csv et les courbes d'étalonnage au format choisit par l'utilisateur.
 
     Parameters
     ----------
     nbr_etalon : int
-        Nombre d'étalon pour l'étalonnage.
+        Nombre de solutions étalons
     nbr_mesure_par_etalon : int
-        Nombre de mesure à faire pour chaque étalon.
+        Nombre de mesures par étalon (200 par défaut à modifier si besoin)
+    conductimeter : serial.tools.list_ports_common.ListPortInfo / string
+        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié. En cas d'échec de connexion, 's' sera une chaîne de caractères "erreur".
+
+    type_conductimeter : int 
+        Entier qui vaut 1 si la sonde est de type K1 et 10 si la sonde est de type K10
 
     Returns
     -------
-    droite : numpy.poly1d
-        Droite d'étalonnage sous la forme ax + b.
+    a : int
+        Coefficient directeur de la régression linéaire C=f(U)
+    b : int
+        Coefficient directeur de la régression linéaire C=f(U)
 
     '''
     donnees=[]
@@ -262,9 +292,12 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
         donnees.append([conductivite,C25,temperature,Tension_etalon,tension_25])
         
         
-
-        a= np.sum(np.array(list_conductivite_25)*np.array(list_tension_25))/np.sum(np.square(np.array(list_tension_25)))#Méthode des moindres carrés 
-    
+        if nbr_etalon==2:
+            reg = np.polyfit(list_tension,list_conductivite,1)
+            a,b=reg[0],reg[1]
+        else : 
+            a= np.sum(np.array(list_conductivite_25)*np.array(list_tension_25))/np.sum(np.square(np.array(list_tension_25)))#Méthode des moindres carrés 
+            b=0
     
 
     print('Le coefficient directeur de la dernière courbe d\'étalonnage vaut :' ,a,'uS.V.cm-1')
@@ -321,10 +354,33 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     plt.show()
     
     np.savetxt('../data/data_etalonnage/etalonnage_du_%s_sonde_K1.csv' %(date),[[a,R_carre]], header = 'Constante de cellule du %s;Constante de cellule K à 25 °C;Constante de cellule K à 25 °C méthode 2;R carre 25 °C;R carre 25 °C méthode 2' %date)
-    return a#Constante de cellule obtenue a partir de la relation C(T)= a*V(T) avec C la conductivité et V la tension 
+    return a,b
 
 
 def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductimeter):
+    '''
+    Fonction qui permet d'étalonner les sondes de type K10 grâce à une régression polyfit et qui enregistre les données automatiquement dans un fichier en format csv et les coubres d'étalonnage au format choisit par l'utilisateur.
+
+    Parameters
+    ----------
+    nbr_etalon : int 
+        Nombre de solutions étalons
+    nbr_mesure_par_etalon : int
+        Nombre de mesures par solution étalons ( 200 par défaut à modifier si besoin dans les paramètres par défaut)
+     conductimeter : serial.tools.list_ports_common.ListPortInfo / string
+         Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié. En cas d'échec de connexion, 's' sera une chaîne de caractères "erreur".
+    type_conductimeter : int
+        Entier qui vaut 1 si le conductimètre possède une sonde K1 et 10 si la sonde est de type K10
+
+    Returns
+    -------
+    a : int
+        Coefficient directeur de la courbe d'étalonnage'
+    b : int
+        Ordonnée à l'origine de la courbe d'étalonnage  
+
+
+    '''
    
     donnees=[]
     list_tension = []
@@ -461,24 +517,35 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
 # FONCTIONS DE MESURE DE CONDUCTIVITÉ
 #
 ################################################################################
-def Mesures_K1(a,nbr_mesure_par_echantillon,conductimeter):
-    """
-    Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.
+def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
+    '''
+    Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d'obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1'
 
     Parameters
     ----------
-    nbr_echantillon : int
-        Nombre d'échantillons à mesurer dans la série.
-    droite : numpy.poly1d
-        Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.
-    nbr_mesure_par_echantillon : int
-        Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.
-        
+    a : int
+        Coefficient directeur de la courbe d'étalonage
+    b : int
+        Ordonnée à l'origine de la courbe d'étalonnage 
+    nbr_mesure_par_echantillon :int 
+        Nombre de mesures par échantillon 
+    conductimeter : serial.tools.list_ports_common.ListPortInfo / string
+        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié. En cas d'échec de connexion, 's' sera une chaîne de caractères "erreur".
+    
     Returns
     -------
-    None.
+    conductivite : int
+       Conductivité moyenne de la solution  à Température ambiante
+    C25 : int
+        Conductivité moyenne de la solution à 25 °C
+    temperature : int
+        Température moyenne de la solution
+    date : datetime
+        Date et heure de la mesure 
 
-    """
+    '''
+    
+
     # conductimeter = port_connexion()[1]
 
     donnees_moyennes = []
@@ -504,7 +571,7 @@ def Mesures_K1(a,nbr_mesure_par_echantillon,conductimeter):
                 temperature=float(data[0])
                 tension=float(data[1])
                 alpha=correction_temperature_mesure(temperature,tension,a)[1]
-                conductivite=a*tension
+                conductivite=a*tension + b
                 C25=conductivite/(alpha*(temperature-25)+1)
                 list_conductivite.append(conductivite)
                 list_temp.append(temperature)
@@ -545,20 +612,30 @@ def Mesures_K1(a,nbr_mesure_par_echantillon,conductimeter):
 
 def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
     """
-    Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.
+    Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d'obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1'
 
     Parameters
     ----------
-    nbr_echantillon : int
-        Nombre d'échantillons à mesurer dans la série.
-    droite : numpy.poly1d
-        Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.
-    nbr_mesure_par_echantillon : int
-        Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.
-        
+    a : int
+        Coefficient directeur de la courbe d'étalonage
+    b : int
+        Ordonnée à l'origine de la courbe d'étalonnage 
+    nbr_mesure_par_echantillon :int 
+        Nombre de mesures par échantillon 
+    conductimeter : serial.tools.list_ports_common.ListPortInfo / string
+        Objet Serial sur lequel on peut appliquer des fonctions d'ouverture, de lecture et de fermeture du port série affilié. En cas d'échec de connexion, 's' sera une chaîne de caractères "erreur".
+    
     Returns
     -------
-    None.
+    conductivite : int
+       Conductivité moyenne de la solution  à Température ambiante
+    C25 : int
+        Conductivité moyenne de la solution à 25 °C
+    temperature : int
+        Température moyenne de la solution
+    date : datetime
+        Date et heure de la mesure 
+
 
     """
     # conductimeter = port_connexion()[1]
@@ -635,6 +712,24 @@ def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
 #################################################################################
 
 def correction_temperature_etalonnage(C25,Temperature_echantillon):
+    '''
+    Fonction qui prend en argument la conductivité d'une solution étalon à 25 et sa température et renvoie la conductivité corrigée'
+
+    Parameters
+    ----------
+    C25 : int
+        Conductivité de la solution étalon à 25 °C
+    Temperature_echantillon : int
+        Température moyenne de la solution
+
+    Returns
+    -------
+    conductivite_corrige : int
+        Conductivité moyenne de a solution corrigée par la température
+    alpha : int
+        Coefficient de correction de température calculé à partir des données fournies par la société Hanna Instruments. 
+
+    '''
     Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
     Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
@@ -663,6 +758,24 @@ def correction_temperature_etalonnage(C25,Temperature_echantillon):
     return conductivite_corrige,alpha
 
 def correction_temperature_mesure(Temperature_echantillon,Tension_echantillon,K):
+    '''
+    Fonction qui prend en argument la conductivité d'une solution étalon à 25 et sa température et renvoie la conductivité corrigée'
+
+    Parameters
+    ----------
+    C25 : int
+        Conductivité de la solution étalon à 25 °C
+    Temperature_echantillon : int
+        Température moyenne de la solution
+
+    Returns
+    -------
+    conductivite_corrige : int
+        Conductivité moyenne de a solution corrigée par la température
+    alpha : int
+        Coefficient de correction de température calculé à partir des données fournies par la société Hanna Instruments. 
+
+    '''
     Temperature = [0,5,10,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
     Conductivite_12880 = [7150,8220,9330,10480,10720,10950,11190,11430,11670,11910,12150,12390,12640,12880,13130,13370,13620,13870,14120,14370]
     Conductivite_1413 = [776,896,1020,1147,1173,1199,1225,1251,1278,1305,1332,1359,1386,1413,1440,1467,1494,1521,1548,1575]
