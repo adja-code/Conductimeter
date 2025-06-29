@@ -1,4 +1,4 @@
-# Étalon n°; Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)
+# Etalon;Conductivite;Conductivite_25;Temperature;Tension
 1.00;4798.18;5000.00;22.79;123.00
 2.00;4798.18;5000.00;22.79;123.00
 3.00;4804.57;5000.00;22.86;123.00
