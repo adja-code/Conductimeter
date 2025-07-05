@@ -190,10 +190,10 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter
     plt.show()
     
     if type_conductimeter==1:
-        plt.savefig('../data/figures/Courbe_etalonnage_%s_sonde_K1.png' %(date))
+        plt.savefig('../data/figures/Courbe_etalonnage_%s_sonde_K10.pdf' %(date))
     
     if type_conductimeter==10:
-        plt.savefig('../data/figures/Courbe_etalonnage_%s_sonde_K10.png' %(date))
+        plt.savefig('../data/figures/Courbe_etalonnage_%s_sonde_K10.pdf' %(date))
     
     
     
@@ -338,7 +338,7 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     # plt.legend()
     plt.title('Courbe d\'étalonnage du %s (sonde K1)' %(date))
     
-    choix_format_fig=input(format_figures)
+    choix_format_fig=int(input(format_figures))
     if choix_format_fig==1:
         format_figure='pdf'
     elif choix_format_fig==2:
@@ -353,7 +353,7 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     
     plt.show()
     
-    np.savetxt('../data/data_etalonnage/etalonnage_du_%s_sonde_K1.csv' %(date),[[a,R_carre]], header = 'Constante de cellule du %s;Constante de cellule K à 25 °C;Constante de cellule K à 25 °C méthode 2;R carre 25 °C;R carre 25 °C méthode 2' %date)
+    #np.savetxt('../data/data_etalonnage/etalonnage_du_%s_sonde_K1.csv' %(date),[[a,R_carre]], header = 'Constante de cellule du %s;Constante de cellule K à 25 °C;Constante de cellule K à 25 °C méthode 2;R carre 25 °C;R carre 25 °C méthode 2' %date)
     return a,b
 
 
@@ -488,7 +488,7 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
     # plt.legend()
     plt.title('Courbe d\'étalonnage du %s (sonde K10)' %date)
     
-    choix_format_fig=input(format_figures)
+    choix_format_fig=int(input(format_figures))
     if choix_format_fig==1:
         format_figure='pdf'
     elif choix_format_fig==2:
@@ -567,18 +567,18 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
     
         data = conductimeter.readline().decode().strip('\r\n').split(',')
         try :
-            if float(data[1]) != 0 :
-                temperature=float(data[0])
-                tension=float(data[1])
-                alpha=correction_temperature_mesure(temperature,tension,a)[1]
-                conductivite=a*tension + b
-                C25=conductivite/(alpha*(temperature-25)+1)
-                list_conductivite.append(conductivite)
-                list_temp.append(temperature)
-                list_C25.append(C25)
-                print('Conductivité :',conductivite,'us/cm','Conductivité à 25 °C :',C25,'uS/cm', 'Température =',temperature,'°C')
-                donnees.append([i,conductivite,C25,temperature,tension])
-           
+        # if float(data[1]) != 0 :
+            temperature=float(data[0])
+            tension=float(data[1])
+            alpha=correction_temperature_mesure(temperature,tension,a)[1]
+            conductivite=a*tension + b
+            C25=conductivite/(alpha*(temperature-25)+1)
+            list_conductivite.append(conductivite)
+            list_temp.append(temperature)
+            list_C25.append(C25)
+            print('Conductivité :',conductivite,'us/cm','Conductivité à 25 °C :',C25,'uS/cm', 'Température =',temperature,'°C')
+            donnees.append([i,conductivite,C25,temperature,tension])
+       
         
        
         except Exception:
@@ -659,7 +659,7 @@ def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
     
         data = conductimeter.readline().decode().strip('\r\n').split(',')
         try :
-            if float(data[1]) != 0 :
+            # if float(data[1]) != 0 :
                 temperature=float(data[0])
                 tension=float(data[1])
                 alpha=correction_temperature_mesure(temperature,tension,a)[1]
