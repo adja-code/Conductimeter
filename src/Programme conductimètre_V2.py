@@ -116,8 +116,8 @@ if __name__ == '__main__':
         elif reponse == '2' : # Mesures
             if type_conductimeter==1:
                 try : 
-                    a= float(np.loadtxt('/home/dfed/Nextcloud/Conductimetre/data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1))
-                    b= float(np.loadtxt('/home/dfed/Nextcloud/Conductimetre/data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=1, delimiter = ';',skiprows=1))
+                    a= float(np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=0, delimiter = ';',skiprows=1))
+                    b= float(np.loadtxt('../data/data_etalonnage/dernier_etalonnage_K1.csv',usecols=1, delimiter = ';',skiprows=1))
                     print('Le dernier étalonnage a été enregistré, il sera réutilisé par défaut si vous n\'en refaite pas. Il est cependant conseillé d\'en refaire avant chaque utilisation du conductimètre.\nLa valeur du coefficient directeur de la courbe d\'étalonnage vaut :',a,'L\'ordonnée à l\'origine vaut :',b)
                 except Exception :
                     print('Aucun calibrage n\'est enregistré, il vous faut en faire un.')
