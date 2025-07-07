@@ -2,32 +2,48 @@ Documentation du code python
 ============================
 
 
-Description de la fonction setup
---------------------------------
+Description de la fonction port_connexion()
+-------------------------------------------
 
-.. autofunction:: ADNI_ProgrammePython.setup
+.. autofunction:: lib_conductimetre.port_connexion
 
 
-Description de la fonction mesure_etalonnage
+Description de la fonction type_conductimetre
 --------------------------------------------
 
-.. autofunction:: ADNI_ProgrammePython.mesure_etalonnage
+.. autofunction:: lib_conductimetre.type_conductimetre
 
 
-Description de la fonction d'étalonnage
----------------------------------------
-
-.. autofunction:: ADNI_ProgrammePython.Etalonnage
-
-Description de la fonction de mesures 
--------------------------------------
-
-.. autofunction:: ADNI_ProgrammePython.Mesures 
-
-Description de la fonction graph_conductimeter
+Description de la fonction mesure_etalonnage()
 ----------------------------------------------
 
-.. autofunction:: ADNI_ProgrammePython.graph_conductimeter 
+.. autofunction:: lib_conductimetre.mesure_etalonnage
+
+Description de la fonction Etalonnage_K1()  
+------------------------------------------
+
+.. autofunction:: lib_conductimetre.Etalonnage_K1
+
+Description de la fonction Etalonnage_K10()  
+-------------------------------------------
+
+.. autofunction:: lib_conductimetre.Etalonnage_K10
+
+Description de la fonction Mesures_K1()  
+---------------------------------------
+
+.. autofunction:: lib_conductimetre.Mesures_K1
+
+Description de la fonction Mesures_K10()  
+---------------------------------------
+
+.. autofunction:: lib_conductimetre.Mesures_K10
+
+Description de la fonction correction_temperature_etalonnage()  
+---------------------------------------
+
+.. autofunction:: lib_conductimetre.Mesures_K1
+
 
 
 

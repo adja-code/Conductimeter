@@ -64,7 +64,7 @@
 
 
 \title{Conductimètre}
-\date{juin 26, 2025}
+\date{juin 29, 2025}
 \release{1}
 \author{Adja Condé, Nina Rubin, François métivier}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -98,7 +98,7 @@ arduino.
 \begin{figure}[htbp]
 \centering
 
-\noindent\sphinxincludegraphics{{schema_montage}.png}
+\noindent\sphinxincludegraphics{{images/schema_montage}.png}
 \end{figure}
 
 \sphinxAtStartPar
@@ -167,7 +167,7 @@ comme sur le schéma suivant :
 \begin{figure}[htbp]
 \centering
 
-\noindent\sphinxincludegraphics{{schema_electrodes}.png}
+\noindent\sphinxincludegraphics{{images/schema_electrodes}.png}
 \end{figure}
 
 \sphinxAtStartPar
@@ -252,7 +252,7 @@ suivant :
 \begin{figure}[htbp]
 \centering
 
-\noindent\sphinxincludegraphics{{schema_electrodes}.png}
+\noindent\sphinxincludegraphics{{images/schema_electrodes}.png}
 \end{figure}
 \begin{enumerate}
 \sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
@@ -305,24 +305,41 @@ La majeure partie du travail a été effectuée pendant l’étalonnage. Cette p
 \chapter{Documentation du code python}
 \label{\detokenize{Documentation:documentation-du-code-python}}\label{\detokenize{Documentation::doc}}
 
-\section{Description de la fonction setup}
-\label{\detokenize{Documentation:description-de-la-fonction-setup}}\index{setup() (dans le module ADNI\_ProgrammePython)@\spxentry{setup()}\spxextra{dans le module ADNI\_ProgrammePython}}
+\section{Description de la fonction port\_connexion()}
+\label{\detokenize{Documentation:description-de-la-fonction-port-connexion}}\index{port\_connexion() (dans le module lib\_conductimetre)@\spxentry{port\_connexion()}\spxextra{dans le module lib\_conductimetre}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Documentation:ADNI_ProgrammePython.setup}}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.port_connexion}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ADNI\_ProgrammePython.}}\sphinxbfcode{\sphinxupquote{setup}}}{}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{port\_connexion}}}{\emph{\DUrole{n}{br}\DUrole{o}{=}\DUrole{default_value}{115200}}, \emph{\DUrole{n}{portIN}\DUrole{o}{=}\DUrole{default_value}{\textquotesingle{}\textquotesingle{}}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Paramètre d’initialisation de la carte Arduino.
+Établit la connexion au port série.
 \begin{quote}\begin{description}
+\sphinxlineitem{Paramètres}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{br}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Flux de données en baud.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{portIN}} (\sphinxstyleliteralemphasis{\sphinxupquote{string}}) \textendash{} Identifiant du port série sur lequel le script doit lire des données.
+
+\end{itemize}
+
 \sphinxlineitem{Renvoie}
 \sphinxAtStartPar
-\sphinxstylestrong{arduino} \textendash{} Localisation de la carte arduino du conductimètre.
-
-\sphinxlineitem{Type renvoyé}
+\begin{itemize}
+\item {} 
 \sphinxAtStartPar
-TYPE
+\sphinxstylestrong{port} (\sphinxstyleemphasis{string}) \textendash{} Identifiant du port série sur lequel le script doit lire des données.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{s} (\sphinxstyleemphasis{serial.tools.list\_ports\_common.ListPortInfo / string}) \textendash{} Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+
+\end{itemize}
+
 
 \end{description}\end{quote}
 
@@ -330,28 +347,94 @@ TYPE
 
 
 
-\section{Description de la fonction mesure\_etalonnage}
-\label{\detokenize{Documentation:description-de-la-fonction-mesure-etalonnage}}\index{mesure\_etalonnage() (dans le module ADNI\_ProgrammePython)@\spxentry{mesure\_etalonnage()}\spxextra{dans le module ADNI\_ProgrammePython}}
+\section{Description de la fonction type\_conductimetre}
+\label{\detokenize{Documentation:description-de-la-fonction-type-conductimetre}}\index{type\_conductimetre() (dans le module lib\_conductimetre)@\spxentry{type\_conductimetre()}\spxextra{dans le module lib\_conductimetre}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Documentation:ADNI_ProgrammePython.mesure_etalonnage}}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.type_conductimetre}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ADNI\_ProgrammePython.}}\sphinxbfcode{\sphinxupquote{mesure\_etalonnage}}}{\emph{\DUrole{n}{nbr\_mesure\_par\_etalon}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{type\_conductimetre}}}{}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu’elles sont stables”
+Fonction qui détermine si le conductimètre possède une sonde de type K1 ou K10 en fonction du numéro de série de la carte arduino.
 \begin{quote}\begin{description}
-\sphinxlineitem{Paramètres}
+\sphinxlineitem{Renvoie}
+\sphinxAtStartPar
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{type\_sonde} (\sphinxstyleemphasis{TYPE})
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleemphasis{Entier qui vaut 1 Si la sonde du conductimètre est de type K1 et 10 si la sonde est de type K10.}
+
+\end{itemize}
+
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\section{Description de la fonction mesure\_etalonnage()}
+\label{\detokenize{Documentation:description-de-la-fonction-mesure-etalonnage}}\index{mesure\_etalonnage() (dans le module lib\_conductimetre)@\spxentry{mesure\_etalonnage()}\spxextra{dans le module lib\_conductimetre}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.mesure_etalonnage}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{mesure\_etalonnage}}}{\emph{\DUrole{n}{nbr\_mesure\_par\_etalon}}, \emph{\DUrole{n}{conductimeter}}, \emph{\DUrole{n}{C25}}, \emph{\DUrole{n}{type\_conductimeter}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Fonction permettant de faire une série de mesures à haute fréquence, et de la représenter sur un graphique
+\begin{quote}\begin{description}
+\sphinxlineitem{Paramètres}\begin{itemize}
+\item {} 
 \sphinxAtStartPar
 \sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} nombre de mesures par étalon, décidé dans les valeurs par défaut.
 
-\sphinxlineitem{Renvoie}
+\item {} 
 \sphinxAtStartPar
-\sphinxstylestrong{list\_tension\_etalon} \textendash{} Liste des tensions mesurées pendant l’étalonnage.
+\sphinxstyleliteralstrong{\sphinxupquote{Returns}} \textendash{} 
 
-\sphinxlineitem{Type renvoyé}
+\item {} 
 \sphinxAtStartPar
-list
+\sphinxstyleliteralstrong{\sphinxupquote{conductivite}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Conductivité moyenne à température ambiante
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Ecart\_type\_conductivite}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Ecart\sphinxhyphen{}type associé à la valeur de conductivite moyenne
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Tension\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} 
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{ambiante}} (\sphinxstyleliteralemphasis{\sphinxupquote{Tension moyenne mesurée à température}}) \textendash{} 
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Ecart\_type\_tension}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Ecart\_type associé à la valeure de tension mesurée en dortie de la sonde conductimétrique.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Temperature\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Température moyenne de la solution
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{Ecart\_type\_temperature}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Écart type associé à la valeur moyenne de conductivité.
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{alpha}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Coefficient de correction de tepérature à 25 °C calculé à partir des données présentes sur les solutions tampons Hanna Instruments
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{\sphinxhyphen{}\sphinxhyphen{}\sphinxhyphen{}\sphinxhyphen{}\sphinxhyphen{}\sphinxhyphen{}\sphinxhyphen{}}} \textendash{} 
+
+\end{itemize}
 
 \end{description}\end{quote}
 
@@ -359,35 +442,49 @@ list
 
 
 
-\section{Description de la fonction d’étalonnage}
-\label{\detokenize{Documentation:description-de-la-fonction-d-etalonnage}}\index{Etalonnage() (dans le module ADNI\_ProgrammePython)@\spxentry{Etalonnage()}\spxextra{dans le module ADNI\_ProgrammePython}}
+\section{Description de la fonction Etalonnage\_K1()}
+\label{\detokenize{Documentation:description-de-la-fonction-etalonnage-k1}}\index{Etalonnage\_K1() (dans le module lib\_conductimetre)@\spxentry{Etalonnage\_K1()}\spxextra{dans le module lib\_conductimetre}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Documentation:ADNI_ProgrammePython.Etalonnage}}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.Etalonnage_K1}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ADNI\_ProgrammePython.}}\sphinxbfcode{\sphinxupquote{Etalonnage}}}{\emph{\DUrole{n}{nbr\_etalon}}, \emph{\DUrole{n}{nbr\_mesure\_par\_etalon}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{Etalonnage\_K1}}}{\emph{\DUrole{n}{nbr\_etalon}}, \emph{\DUrole{n}{nbr\_mesure\_par\_etalon}}, \emph{\DUrole{n}{conductimeter}}, \emph{\DUrole{n}{type\_conductimeter}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Fonction qui, pour le nombre d’étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tensino et conductivité, puis trace le graphique et renvoie la droite d’étalonnage
+Fonction qui permet d’étalonner les sondes de type K10 grâce à une régression polyfit si le nombre d’étalons vaut 2  ou gâce à la méthode des moindres carrés et qui enregistre les données automatiquement dans un fichier en format csv et les courbes d’étalonnage au format choisit par l’utilisateur.
 \begin{quote}\begin{description}
 \sphinxlineitem{Paramètres}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{nbr\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre d’étalon pour l’étalonnage.
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de solutions étalons
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesure à faire pour chaque étalon.
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesures par étalon (200 par défaut à modifier si besoin)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{serial.tools.list\_ports\_common.ListPortInfo / string}}) \textendash{} Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{type\_conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Entier qui vaut 1 si la sonde est de type K1 et 10 si la sonde est de type K10
 
 \end{itemize}
 
 \sphinxlineitem{Renvoie}
 \sphinxAtStartPar
-\sphinxstylestrong{droite} \textendash{} Droite d’étalonnage sous la forme ax + b.
-
-\sphinxlineitem{Type renvoyé}
+\begin{itemize}
+\item {} 
 \sphinxAtStartPar
-numpy.poly1d
+\sphinxstylestrong{a} (\sphinxstyleemphasis{int}) \textendash{} Coefficient directeur de la régression linéaire C=f(U)
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{b} (\sphinxstyleemphasis{int}) \textendash{} Coefficient directeur de la régression linéaire C=f(U)
+
+\end{itemize}
+
 
 \end{description}\end{quote}
 
@@ -395,35 +492,54 @@ numpy.poly1d
 
 
 
-\section{Description de la fonction de mesures}
-\label{\detokenize{Documentation:description-de-la-fonction-de-mesures}}\index{Mesures() (dans le module ADNI\_ProgrammePython)@\spxentry{Mesures()}\spxextra{dans le module ADNI\_ProgrammePython}}
+\section{Description de la fonction Etalonnage\_K10()}
+\label{\detokenize{Documentation:description-de-la-fonction-etalonnage-k10}}\index{Etalonnage\_K10() (dans le module lib\_conductimetre)@\spxentry{Etalonnage\_K10()}\spxextra{dans le module lib\_conductimetre}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Documentation:ADNI_ProgrammePython.Mesures}}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.Etalonnage_K10}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ADNI\_ProgrammePython.}}\sphinxbfcode{\sphinxupquote{Mesures}}}{\emph{\DUrole{n}{nbr\_echantillon}}, \emph{\DUrole{n}{droite}}, \emph{\DUrole{n}{nbr\_mesure\_par\_echantillon}}}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{Etalonnage\_K10}}}{\emph{\DUrole{n}{nbr\_etalon}}, \emph{\DUrole{n}{nbr\_mesure\_par\_etalon}}, \emph{\DUrole{n}{conductimeter}}, \emph{\DUrole{n}{type\_conductimeter}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.
+Fonction qui permet d’étalonner les sondes de type K10 grâce à une régression polyfit et qui enregistre les données automatiquement dans un fichier en format csv et les coubres d’étalonnage au format choisit par l’utilisateur.
 \begin{quote}\begin{description}
 \sphinxlineitem{Paramètres}\begin{itemize}
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{nbr\_echantillon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre d’échantillons à mesurer dans la série.
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de solutions étalons
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{droite}} (\sphinxstyleliteralemphasis{\sphinxupquote{numpy.poly1d}}) \textendash{} Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_etalon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} 
+\sphinxAtStartPar
+Nombre de mesures par solution étalons ( 200 par défaut à modifier si besoin dans les paramètres par défaut)
+conductimeter : serial.tools.list\_ports\_common.ListPortInfo / string
+\begin{quote}
+
+\sphinxAtStartPar
+Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+\end{quote}
+
 
 \item {} 
 \sphinxAtStartPar
-\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_echantillon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.
+\sphinxstyleliteralstrong{\sphinxupquote{type\_conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Entier qui vaut 1 si le conductimètre possède une sonde K1 et 10 si la sonde est de type K10
 
 \end{itemize}
 
-\sphinxlineitem{Type renvoyé}
+\sphinxlineitem{Renvoie}
 \sphinxAtStartPar
-None.
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{a} (\sphinxstyleemphasis{int}) \textendash{} Coefficient directeur de la courbe d’étalonnage”
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{b} (\sphinxstyleemphasis{int}) \textendash{} Ordonnée à l’origine de la courbe d’étalonnage
+
+\end{itemize}
+
 
 \end{description}\end{quote}
 
@@ -431,20 +547,173 @@ None.
 
 
 
-\section{Description de la fonction graph\_conductimeter}
-\label{\detokenize{Documentation:description-de-la-fonction-graph-conductimeter}}\index{graph\_conductimeter() (dans le module ADNI\_ProgrammePython)@\spxentry{graph\_conductimeter()}\spxextra{dans le module ADNI\_ProgrammePython}}
+\section{Description de la fonction Mesures\_K1()}
+\label{\detokenize{Documentation:description-de-la-fonction-mesures-k1}}\index{Mesures\_K1() (dans le module lib\_conductimetre)@\spxentry{Mesures\_K1()}\spxextra{dans le module lib\_conductimetre}}
 
 \begin{fulllineitems}
-\phantomsection\label{\detokenize{Documentation:ADNI_ProgrammePython.graph_conductimeter}}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.Mesures_K1}}
 \pysigstartsignatures
-\pysiglinewithargsret{\sphinxcode{\sphinxupquote{ADNI\_ProgrammePython.}}\sphinxbfcode{\sphinxupquote{graph\_conductimeter}}}{}{}
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{Mesures\_K1}}}{\emph{\DUrole{n}{a}}, \emph{\DUrole{n}{b}}, \emph{\DUrole{n}{nbr\_mesure\_par\_echantillon}}, \emph{\DUrole{n}{conductimeter}}}{}
 \pysigstopsignatures
 \sphinxAtStartPar
-Fonction qui permet de tracer à partir du fichier data\_conductivité.csv la température et la conductivité en fonction du temps.
+Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”
 \begin{quote}\begin{description}
-\sphinxlineitem{Type renvoyé}
+\sphinxlineitem{Paramètres}\begin{itemize}
+\item {} 
 \sphinxAtStartPar
-None.
+\sphinxstyleliteralstrong{\sphinxupquote{a}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Coefficient directeur de la courbe d’étalonage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{b}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Ordonnée à l’origine de la courbe d’étalonnage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_echantillon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesures par échantillon
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{serial.tools.list\_ports\_common.ListPortInfo / string}}) \textendash{} Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+
+\end{itemize}
+
+\sphinxlineitem{Renvoie}
+\sphinxAtStartPar
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{conductivite} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution  à Température ambiante
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{C25} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution à 25 °C
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{temperature} (\sphinxstyleemphasis{int}) \textendash{} Température moyenne de la solution
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{date} (\sphinxstyleemphasis{datetime}) \textendash{} Date et heure de la mesure
+
+\end{itemize}
+
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\section{Description de la fonction Mesures\_K10()}
+\label{\detokenize{Documentation:description-de-la-fonction-mesures-k10}}\index{Mesures\_K10() (dans le module lib\_conductimetre)@\spxentry{Mesures\_K10()}\spxextra{dans le module lib\_conductimetre}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Documentation:lib_conductimetre.Mesures_K10}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{Mesures\_K10}}}{\emph{\DUrole{n}{a}}, \emph{\DUrole{n}{b}}, \emph{\DUrole{n}{nbr\_mesure\_par\_echantillon}}, \emph{\DUrole{n}{conductimeter}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”
+\begin{quote}\begin{description}
+\sphinxlineitem{Paramètres}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{a}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Coefficient directeur de la courbe d’étalonage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{b}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Ordonnée à l’origine de la courbe d’étalonnage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_echantillon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesures par échantillon
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{serial.tools.list\_ports\_common.ListPortInfo / string}}) \textendash{} Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+
+\end{itemize}
+
+\sphinxlineitem{Renvoie}
+\sphinxAtStartPar
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{conductivite} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution  à Température ambiante
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{C25} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution à 25 °C
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{temperature} (\sphinxstyleemphasis{int}) \textendash{} Température moyenne de la solution
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{date} (\sphinxstyleemphasis{datetime}) \textendash{} Date et heure de la mesure
+
+\end{itemize}
+
+
+\end{description}\end{quote}
+
+\end{fulllineitems}
+
+
+
+\section{Description de la fonction correction\_temperature\_etalonnage()}
+\label{\detokenize{Documentation:description-de-la-fonction-correction-temperature-etalonnage}}\index{Mesures\_K1() (dans le module lib\_conductimetre)@\spxentry{Mesures\_K1()}\spxextra{dans le module lib\_conductimetre}}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{Documentation:id0}}
+\pysigstartsignatures
+\pysiglinewithargsret{\sphinxcode{\sphinxupquote{lib\_conductimetre.}}\sphinxbfcode{\sphinxupquote{Mesures\_K1}}}{\emph{\DUrole{n}{a}}, \emph{\DUrole{n}{b}}, \emph{\DUrole{n}{nbr\_mesure\_par\_echantillon}}, \emph{\DUrole{n}{conductimeter}}}{}
+\pysigstopsignatures
+\sphinxAtStartPar
+Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”
+\begin{quote}\begin{description}
+\sphinxlineitem{Paramètres}\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{a}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Coefficient directeur de la courbe d’étalonage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{b}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Ordonnée à l’origine de la courbe d’étalonnage
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{nbr\_mesure\_par\_echantillon}} (\sphinxstyleliteralemphasis{\sphinxupquote{int}}) \textendash{} Nombre de mesures par échantillon
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstyleliteralstrong{\sphinxupquote{conductimeter}} (\sphinxstyleliteralemphasis{\sphinxupquote{serial.tools.list\_ports\_common.ListPortInfo / string}}) \textendash{} Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».
+
+\end{itemize}
+
+\sphinxlineitem{Renvoie}
+\sphinxAtStartPar
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{conductivite} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution  à Température ambiante
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{C25} (\sphinxstyleemphasis{int}) \textendash{} Conductivité moyenne de la solution à 25 °C
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{temperature} (\sphinxstyleemphasis{int}) \textendash{} Température moyenne de la solution
+
+\item {} 
+\sphinxAtStartPar
+\sphinxstylestrong{date} (\sphinxstyleemphasis{datetime}) \textendash{} Date et heure de la mesure
+
+\end{itemize}
+
 
 \end{description}\end{quote}
 

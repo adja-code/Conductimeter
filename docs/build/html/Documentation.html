@@ -46,27 +46,38 @@
 <li class="toctree-l1"><a class="reference internal" href="Etalonnage.html">Etalonnage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Mesures.html">Mesures</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Documentation du code python</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-setup">Description de la fonction setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.setup"><code class="docutils literal notranslate"><span class="pre">setup()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-port-connexion">Description de la fonction port_connexion()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.port_connexion"><code class="docutils literal notranslate"><span class="pre">port_connexion()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-mesure-etalonnage">Description de la fonction mesure_etalonnage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.mesure_etalonnage"><code class="docutils literal notranslate"><span class="pre">mesure_etalonnage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-type-conductimetre">Description de la fonction type_conductimetre</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.type_conductimetre"><code class="docutils literal notranslate"><span class="pre">type_conductimetre()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-d-etalonnage">Description de la fonction d’étalonnage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.Etalonnage"><code class="docutils literal notranslate"><span class="pre">Etalonnage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-mesure-etalonnage">Description de la fonction mesure_etalonnage()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.mesure_etalonnage"><code class="docutils literal notranslate"><span class="pre">mesure_etalonnage()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-de-mesures">Description de la fonction de mesures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.Mesures"><code class="docutils literal notranslate"><span class="pre">Mesures()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-etalonnage-k1">Description de la fonction Etalonnage_K1()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.Etalonnage_K1"><code class="docutils literal notranslate"><span class="pre">Etalonnage_K1()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-graph-conductimeter">Description de la fonction graph_conductimeter</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ADNI_ProgrammePython.graph_conductimeter"><code class="docutils literal notranslate"><span class="pre">graph_conductimeter()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-etalonnage-k10">Description de la fonction Etalonnage_K10()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.Etalonnage_K10"><code class="docutils literal notranslate"><span class="pre">Etalonnage_K10()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-acceuil">Description de la fonction acceuil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-mesures-k1">Description de la fonction Mesures_K1()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.Mesures_K1"><code class="docutils literal notranslate"><span class="pre">Mesures_K1()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-mesures-k10">Description de la fonction Mesures_K10()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#lib_conductimetre.Mesures_K10"><code class="docutils literal notranslate"><span class="pre">Mesures_K10()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#description-de-la-fonction-correction-temperature-etalonnage">Description de la fonction correction_temperature_etalonnage()</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Mesures_K1()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -97,103 +108,213 @@
              
   <section id="documentation-du-code-python">
 <h1>Documentation du code python<a class="headerlink" href="#documentation-du-code-python" title="Lien permanent vers cette rubrique"></a></h1>
-<section id="description-de-la-fonction-setup">
-<h2>Description de la fonction setup<a class="headerlink" href="#description-de-la-fonction-setup" title="Lien permanent vers cette rubrique"></a></h2>
+<section id="description-de-la-fonction-port-connexion">
+<h2>Description de la fonction port_connexion()<a class="headerlink" href="#description-de-la-fonction-port-connexion" title="Lien permanent vers cette rubrique"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ADNI_ProgrammePython.setup">
-<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.setup" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Paramètre d’initialisation de la carte Arduino.</p>
+<dt class="sig sig-object py" id="lib_conductimetre.port_connexion">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">port_connexion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">br</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">115200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portIN</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.port_connexion" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Établit la connexion au port série.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>br</strong> (<em>int</em>) – Flux de données en baud.</p></li>
+<li><p><strong>portIN</strong> (<em>string</em>) – Identifiant du port série sur lequel le script doit lire des données.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>port</strong> (<em>string</em>) – Identifiant du port série sur lequel le script doit lire des données.</p></li>
+<li><p><strong>s</strong> (<em>serial.tools.list_ports_common.ListPortInfo / string</em>) – Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-type-conductimetre">
+<h2>Description de la fonction type_conductimetre<a class="headerlink" href="#description-de-la-fonction-type-conductimetre" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lib_conductimetre.type_conductimetre">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">type_conductimetre</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.type_conductimetre" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui détermine si le conductimètre possède une sonde de type K1 ou K10 en fonction du numéro de série de la carte arduino.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Renvoie<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>arduino</strong> – Localisation de la carte arduino du conductimètre.</p>
-</dd>
-<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-even"><p>TYPE</p>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>type_sonde</strong> (<em>TYPE</em>)</p></li>
+<li><p><em>Entier qui vaut 1 Si la sonde du conductimètre est de type K1 et 10 si la sonde est de type K10.</em></p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
 <section id="description-de-la-fonction-mesure-etalonnage">
-<h2>Description de la fonction mesure_etalonnage<a class="headerlink" href="#description-de-la-fonction-mesure-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
+<h2>Description de la fonction mesure_etalonnage()<a class="headerlink" href="#description-de-la-fonction-mesure-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ADNI_ProgrammePython.mesure_etalonnage">
-<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">mesure_etalonnage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.mesure_etalonnage" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Fonction permettant de faire plein de mesure à haute fréquence puis les mettant dans un graphique pour vérifier qu’elles sont stables”</p>
-<dl class="field-list simple">
-<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – nombre de mesures par étalon, décidé dans les valeurs par défaut.</p>
-</dd>
-<dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>list_tension_etalon</strong> – Liste des tensions mesurées pendant l’étalonnage.</p>
-</dd>
-<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="description-de-la-fonction-d-etalonnage">
-<h2>Description de la fonction d’étalonnage<a class="headerlink" href="#description-de-la-fonction-d-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ADNI_ProgrammePython.Etalonnage">
-<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">Etalonnage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.Etalonnage" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Fonction qui, pour le nombre d’étalon indiqué en argument, mesure la tension, trouve la corrélation entre Tensino et conductivité, puis trace le graphique et renvoie la droite d’étalonnage</p>
+<dt class="sig sig-object py" id="lib_conductimetre.mesure_etalonnage">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">mesure_etalonnage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.mesure_etalonnage" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction permettant de faire une série de mesures à haute fréquence, et de la représenter sur un graphique</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nbr_etalon</strong> (<em>int</em>) – Nombre d’étalon pour l’étalonnage.</p></li>
-<li><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – Nombre de mesure à faire pour chaque étalon.</p></li>
+<li><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – nombre de mesures par étalon, décidé dans les valeurs par défaut.</p></li>
+<li><p><strong>Returns</strong> – </p></li>
+<li><p><strong>conductivite</strong> (<em>int</em>) – Conductivité moyenne à température ambiante</p></li>
+<li><p><strong>Ecart_type_conductivite</strong> (<em>int</em>) – Ecart-type associé à la valeur de conductivite moyenne</p></li>
+<li><p><strong>Tension_etalon</strong> (<em>int</em>) – </p></li>
+<li><p><strong>ambiante</strong> (<em>Tension moyenne mesurée à température</em>) – </p></li>
+<li><p><strong>Ecart_type_tension</strong> (<em>int</em>) – Ecart_type associé à la valeure de tension mesurée en dortie de la sonde conductimétrique.</p></li>
+<li><p><strong>Temperature_etalon</strong> (<em>int</em>) – Température moyenne de la solution</p></li>
+<li><p><strong>Ecart_type_temperature</strong> (<em>int</em>) – Écart type associé à la valeur moyenne de conductivité.</p></li>
+<li><p><strong>alpha</strong> (<em>int</em>) – Coefficient de correction de tepérature à 25 °C calculé à partir des données présentes sur les solutions tampons Hanna Instruments</p></li>
+<li><p><strong>-------</strong> – </p></li>
 </ul>
-</dd>
-<dt class="field-even">Renvoie<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>droite</strong> – Droite d’étalonnage sous la forme ax + b.</p>
-</dd>
-<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.poly1d</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
-<section id="description-de-la-fonction-de-mesures">
-<h2>Description de la fonction de mesures<a class="headerlink" href="#description-de-la-fonction-de-mesures" title="Lien permanent vers cette rubrique"></a></h2>
+<section id="description-de-la-fonction-etalonnage-k1">
+<h2>Description de la fonction Etalonnage_K1()<a class="headerlink" href="#description-de-la-fonction-etalonnage-k1" title="Lien permanent vers cette rubrique"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ADNI_ProgrammePython.Mesures">
-<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">Mesures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_echantillon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">droite</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_echantillon</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.Mesures" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Fonction pour faire les mesures de conductivité et de température et les stocker dans un fichier.</p>
+<dt class="sig sig-object py" id="lib_conductimetre.Etalonnage_K1">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">Etalonnage_K1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.Etalonnage_K1" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui permet d’étalonner les sondes de type K10 grâce à une régression polyfit si le nombre d’étalons vaut 2  ou gâce à la méthode des moindres carrés et qui enregistre les données automatiquement dans un fichier en format csv et les courbes d’étalonnage au format choisit par l’utilisateur.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Paramètres<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nbr_echantillon</strong> (<em>int</em>) – Nombre d’échantillons à mesurer dans la série.</p></li>
-<li><p><strong>droite</strong> (<em>numpy.poly1d</em>) – Equation de droite du calibrage permettant de lier la tension mesurer par le conductimètre et la conductivité réelle.</p></li>
-<li><p><strong>nbr_mesure_par_echantillon</strong> (<em>int</em>) – Nombre de mesure sur lesquelles les conductivité et température moyennes seront calculées.</p></li>
+<li><p><strong>nbr_etalon</strong> (<em>int</em>) – Nombre de solutions étalons</p></li>
+<li><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – Nombre de mesures par étalon (200 par défaut à modifier si besoin)</p></li>
+<li><p><strong>conductimeter</strong> (<em>serial.tools.list_ports_common.ListPortInfo / string</em>) – Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p></li>
+<li><p><strong>type_conductimeter</strong> (<em>int</em>) – Entier qui vaut 1 si la sonde est de type K1 et 10 si la sonde est de type K10</p></li>
 </ul>
 </dd>
-<dt class="field-even">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-even"><p>None.</p>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – Coefficient directeur de la régression linéaire C=f(U)</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – Coefficient directeur de la régression linéaire C=f(U)</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
-<section id="description-de-la-fonction-graph-conductimeter">
-<h2>Description de la fonction graph_conductimeter<a class="headerlink" href="#description-de-la-fonction-graph-conductimeter" title="Lien permanent vers cette rubrique"></a></h2>
+<section id="description-de-la-fonction-etalonnage-k10">
+<h2>Description de la fonction Etalonnage_K10()<a class="headerlink" href="#description-de-la-fonction-etalonnage-k10" title="Lien permanent vers cette rubrique"></a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="ADNI_ProgrammePython.graph_conductimeter">
-<span class="sig-prename descclassname"><span class="pre">ADNI_ProgrammePython.</span></span><span class="sig-name descname"><span class="pre">graph_conductimeter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ADNI_ProgrammePython.graph_conductimeter" title="Lien permanent vers cette définition"></a></dt>
-<dd><p>Fonction qui permet de tracer à partir du fichier data_conductivité.csv la température et la conductivité en fonction du temps.</p>
+<dt class="sig sig-object py" id="lib_conductimetre.Etalonnage_K10">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">Etalonnage_K10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbr_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_etalon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.Etalonnage_K10" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui permet d’étalonner les sondes de type K10 grâce à une régression polyfit et qui enregistre les données automatiquement dans un fichier en format csv et les coubres d’étalonnage au format choisit par l’utilisateur.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type renvoyé<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None.</p>
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbr_etalon</strong> (<em>int</em>) – Nombre de solutions étalons</p></li>
+<li><p><strong>nbr_mesure_par_etalon</strong> (<em>int</em>) – <p>Nombre de mesures par solution étalons ( 200 par défaut à modifier si besoin dans les paramètres par défaut)
+conductimeter : serial.tools.list_ports_common.ListPortInfo / string</p>
+<blockquote>
+<div><p>Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>type_conductimeter</strong> (<em>int</em>) – Entier qui vaut 1 si le conductimètre possède une sonde K1 et 10 si la sonde est de type K10</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – Coefficient directeur de la courbe d’étalonnage”</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – Ordonnée à l’origine de la courbe d’étalonnage</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
-<section id="description-de-la-fonction-acceuil">
-<h2>Description de la fonction acceuil<a class="headerlink" href="#description-de-la-fonction-acceuil" title="Lien permanent vers cette rubrique"></a></h2>
+<section id="description-de-la-fonction-mesures-k1">
+<h2>Description de la fonction Mesures_K1()<a class="headerlink" href="#description-de-la-fonction-mesures-k1" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lib_conductimetre.Mesures_K1">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">Mesures_K1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_echantillon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.Mesures_K1" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – Coefficient directeur de la courbe d’étalonage</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – Ordonnée à l’origine de la courbe d’étalonnage</p></li>
+<li><p><strong>nbr_mesure_par_echantillon</strong> (<em>int</em>) – Nombre de mesures par échantillon</p></li>
+<li><p><strong>conductimeter</strong> (<em>serial.tools.list_ports_common.ListPortInfo / string</em>) – Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>conductivite</strong> (<em>int</em>) – Conductivité moyenne de la solution  à Température ambiante</p></li>
+<li><p><strong>C25</strong> (<em>int</em>) – Conductivité moyenne de la solution à 25 °C</p></li>
+<li><p><strong>temperature</strong> (<em>int</em>) – Température moyenne de la solution</p></li>
+<li><p><strong>date</strong> (<em>datetime</em>) – Date et heure de la mesure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-mesures-k10">
+<h2>Description de la fonction Mesures_K10()<a class="headerlink" href="#description-de-la-fonction-mesures-k10" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="lib_conductimetre.Mesures_K10">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">Mesures_K10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_echantillon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_conductimetre.Mesures_K10" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – Coefficient directeur de la courbe d’étalonage</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – Ordonnée à l’origine de la courbe d’étalonnage</p></li>
+<li><p><strong>nbr_mesure_par_echantillon</strong> (<em>int</em>) – Nombre de mesures par échantillon</p></li>
+<li><p><strong>conductimeter</strong> (<em>serial.tools.list_ports_common.ListPortInfo / string</em>) – Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>conductivite</strong> (<em>int</em>) – Conductivité moyenne de la solution  à Température ambiante</p></li>
+<li><p><strong>C25</strong> (<em>int</em>) – Conductivité moyenne de la solution à 25 °C</p></li>
+<li><p><strong>temperature</strong> (<em>int</em>) – Température moyenne de la solution</p></li>
+<li><p><strong>date</strong> (<em>datetime</em>) – Date et heure de la mesure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="description-de-la-fonction-correction-temperature-etalonnage">
+<h2>Description de la fonction correction_temperature_etalonnage()<a class="headerlink" href="#description-de-la-fonction-correction-temperature-etalonnage" title="Lien permanent vers cette rubrique"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">lib_conductimetre.</span></span><span class="sig-name descname"><span class="pre">Mesures_K1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nbr_mesure_par_echantillon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductimeter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Lien permanent vers cette définition"></a></dt>
+<dd><p>Fonction qui convertit la tension mesurée par le conductimètre en conductivité, applique une correction de température afin d’obtenir la conductivité à 25°C, et enregistrerles données dans un fichier pour une sonde K1”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>int</em>) – Coefficient directeur de la courbe d’étalonage</p></li>
+<li><p><strong>b</strong> (<em>int</em>) – Ordonnée à l’origine de la courbe d’étalonnage</p></li>
+<li><p><strong>nbr_mesure_par_echantillon</strong> (<em>int</em>) – Nombre de mesures par échantillon</p></li>
+<li><p><strong>conductimeter</strong> (<em>serial.tools.list_ports_common.ListPortInfo / string</em>) – Objet Serial sur lequel on peut appliquer des fonctions d’ouverture, de lecture et de fermeture du port série affilié. En cas d’échec de connexion, “s” sera une chaîne de caractères « erreur ».</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>conductivite</strong> (<em>int</em>) – Conductivité moyenne de la solution  à Température ambiante</p></li>
+<li><p><strong>C25</strong> (<em>int</em>) – Conductivité moyenne de la solution à 25 °C</p></li>
+<li><p><strong>temperature</strong> (<em>int</em>) – Température moyenne de la solution</p></li>
+<li><p><strong>date</strong> (<em>datetime</em>) – Date et heure de la mesure</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 </section>
 

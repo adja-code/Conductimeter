@@ -62,6 +62,16 @@ if __name__ == '__main__':
     ===========================================================================
     Votre réponse >>> 
     """
+    interface_choix_nbr_etalon="""
+    ===========================================================================
+    Combien d'étalons souhaitez vous utiliser ?
+    ===========================================================================
+     1
+     2
+    ===========================================================================
+    Votre réponse >>> 
+    """
+    
     
         
     while(True) : 
@@ -70,12 +80,17 @@ if __name__ == '__main__':
         if reponse == '1' : # Calibration
             choix_calib=int(input(interface_calibration))
             if choix_calib==1 : 
-                nbr_etalon = int(input("Combien d'étalons voulez-vous mesurer ? (au moins 1) : "))
-                if type_conductimeter ==1:
-                   a= Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
-                   print('- Vous avez fini le calibrage.\n')
+                if type_conductimeter == 1:
+                   nbr_etalon = int(input('Combien d\'étalons souhaitez vous utiliser (1 ou 2) ? '))
+                   if nbr_etalon == 2 or nbr_etalon == 1:
+                       a, b = Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon, conductimeter, type_conductimeter)
+                       print("- Vous avez fini l'étalonnage.\n")
+                   else: 
+                       print('Merci de tapez uniquement 1 ou 2 Un étalonnage à trois points n\'est pas recommandé')
                 elif type_conductimeter==10:
-                    a,b=Etalonnage_K10(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductimeter)
+                    print('Votre sonde est de type K10 vous devez étalonner votre solution avec deux solutions étalons')
+                    nbr_etalon = 2
+                    a,b=Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductimeter)
             elif choix_calib==2:
                 type_etalonnage=int(input(interface_type_etalonnage))
                 if type_etalonnage==1:
