@@ -165,14 +165,6 @@ def type_conductimetre():
 #
 ##########################################################
 interface_nom_graphique="""
-===========================================================================
-Comment souhaitez-vous nommer votre graphique? 
-===========================================================================
-- Veuillez éviter les espaces et les remplacer par  des underscores "_"
-
-- Veillez à conserver une nomenclature cohérente afin de retrouver
-aisément vos graphiques
-===========================================================================
 Votre réponse >>> 
 """
 
@@ -250,7 +242,7 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter
             list_temperature.append(temperature)
             list_conductivite.append(conductivite)
             temps.append(k*0.01)
-            print(' Conductivité:',conductivite,'uS/cm', 'Température :',temperature,'°C')
+            print('Conductivité:',conductivite,' μS/cm ;', 'Température:',temperature,'°C ',end="\r")
             numero=k+1
             donnees.append([numero,conductivite,C25,temperature,tension])
            
@@ -273,19 +265,18 @@ def mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter
     plt.figure()
     plt.plot(temps, list_conductivite, 'o')
     plt.xlabel('Temps (s)')
-    plt.ylabel('Conductivité (uS/cm)')
+    plt.ylabel('Conductivité ( μS/cm)')
     plt.title('Evolution de la conductivité en fonction du temps')
-    plt.show()
     
 
-    print('\n\n Un graphique représentant l\'évolution de la conductivité en fonction du temps sera affiché et enregistré\n' )
-    nom_graphique = input(interface_nom_graphique)
-    plt.savefig('../data/figures/%s.pdf' %(nom_graphique))
-  
+    print('\n\n Un graphique représentant l\'évolution de la conductivité en fonction du temps sera affiché et enregistré sous le nom Evolution_conductivite_%s \n'%date )
+    # nom_graphique = input(interface_nom_graphique)
+    plt.savefig('../data/figures/Evolution_conductivite_%s .pdf' %(date))
+    plt.show()
     
     
     
-    np.savetxt('../data/data_etalonnage/donnees_brutes_etalonnage_%s.csv' % (date), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°; Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
+    np.savetxt('../data/data_etalonnage/donnees_brutes_etalonnage_%s.csv' % (date), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°; Conductivité de la solution ( μS/cm);Conductivité de la solution à 25°C ( μS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
     return conductivite,Ecart_type_conductivite,Tension_etalon,Ecart_type_tension,Temperature_etalon,Ecart_type_temperature
 
 
@@ -340,7 +331,7 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     for k in range(nbr_etalon):
         print('\n[ Étalon', k+1,']')
         
-        C25 = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en uS/cm):'))
+        C25 = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en  μS/cm):'))
         input('\nAppuyez sur Entrée pour lancer la mesure.')
         conductivite,Ecart_type_conductivite,Tension_etalon,Ecart_type_tension,temperature,Ecart_type_temperature = mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter)
         alpha=coefficient_correction_temperature()
@@ -377,7 +368,9 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
         # a = input('\nEst ce que la mesure est stable ? (y/n) : ')
         # moy_etalon = stabilite_mesure(a, list_tension_etalonnage, nbr_mesure_par_etalon)
         # list_tension.append(float(moy_etalon))
-        print('Cette mesure est enregistrée, passez à la suite.\n')
+        
+        if nbr_etalon ==2:
+            print('Cette mesure est enregistrée, passez à la suite.\n')
         donnees.append([conductivite,C25,temperature,Tension_etalon,tension_25])
         
         
@@ -394,12 +387,12 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
                 b=0
     
 
-    print('Le coefficient directeur de la dernière courbe d\'étalonnage vaut :' ,a,'uS.V.cm-1')
+    #print('Le coefficient directeur de la dernière courbe d\'étalonnage vaut :' ,a,'uS.V.cm-1')
     
 
     np.savetxt('../data/data_etalonnage/dernier_etalonnage_K1.csv',[[a,b]] ,delimiter = ';',fmt = '%.2f',header="Coefficient directeur dernière courbe étalonnage; Coefficient de correlation linéaire")
-    np.savetxt('../data/data_etalonnage/donnees_etalonnage_K1 %s.csv' % (date), donnees, delimiter = ';',fmt = '%.2f', header="Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V);Tension à 25°C (V)")
-    print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage_K1 %s.csv'%date)    
+    np.savetxt('../data/data_etalonnage/donnees_etalonnage_K1 %s.csv' % (date), donnees, delimiter = ';',fmt = '%.2f', header="Conductivité de la solution ( μS/cm);Conductivité de la solution à 25°C ( μS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V);Tension à 25°C (V)")
+    # print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage_K1 %s.csv'%date)    
     
    
     
@@ -423,26 +416,27 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     plt.plot(list_tension_25,list_conductivite_25, 'o', color = 'pink')
     plt.plot(x,y,'--',color='pink')
     plt.xlabel('Tension  de l\'échantillon à 25°C (V) ')
-    plt.ylabel('Conductivité de l\'échantillon à 25°C (us/cm)')
+    plt.ylabel('Conductivité de l\'échantillon à 25°C ( μS/cm)')
     plt.axis([0, np.max(list_tension)+0.25*np.max(list_tension), 0, np.max(list_conductivite) +0.25*np.max(list_conductivite)])
     # plt.legend()
     plt.title('Courbe d\'étalonnage du %s (sonde K1)' %(date))
     
     
-    print('\n\n Une courbe d\'étalonnage sera enregistrée automatiquement')
+    print('\n\n Une courbe d\'étalonnage sera enregistrée automatiquement comment souhaiter-vous nommer le fichier ? ')
     titre_courbe=input(interface_nom_graphique)
-    choix_format_fig=int(input(format_figures))
-    if choix_format_fig==1:
-        format='pdf'
-    elif choix_format_fig==2:
-        format='svg'
-    elif choix_format_fig==3:
-        format ='png'
-    elif choix_format_fig==4:
-        format ='jpeg'
-    else :
-        print('Merci de répondre uniquement 1 2 3 ou 4')
-        
+    # choix_format_fig=int(input(format_figures))
+    # if choix_format_fig==1:
+    #     format='pdf'
+    # elif choix_format_fig==2:
+    #     format='svg'
+    # elif choix_format_fig==3:
+    #     format ='png'
+    # elif choix_format_fig==4:
+    #     format ='jpeg'
+    # else :
+    #     print('Merci de répondre uniquement 1 2 3 ou 4')
+    
+    format='pdf'
    
     
     
@@ -454,7 +448,7 @@ def Etalonnage_K1(nbr_etalon, nbr_mesure_par_etalon,conductimeter,type_conductim
     print('\n Votre courbe d\'étalonnage a été enregistrée avec succès. \nLes données du fichier %s seront enregistrées automatiquement dans le fichier data_%s.csv' %(titre_courbe,titre_courbe))
     
     np.savetxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',[[a,b]] ,delimiter = ';',fmt = '%.2f',header="Coefficient directeur dernière courbe étalonnage; Ordonnée à l'origine")
-    np.savetxt('../data/data_etalonnage/data_%s.csv' %(titre_courbe), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°; Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
+    np.savetxt('../data/data_etalonnage/data_%s.csv' %(titre_courbe), donnees, delimiter = ';',fmt = '%.2f', header="Conductivité de la solution ( μS/cm);Conductivité de la solution à 25°C ( μS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
     print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage_K10 %s.csv'%date)    
     
     
@@ -511,7 +505,7 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
     for k in range(nbr_etalon):
         print('\n[ Étalon', k+1,']')
         
-        C25 = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en uS/cm): '))
+        C25 = float(input('Quelle est la valeur de conductivité de votre étalon à 25°C ? (en  μS/cm): '))
         input('\nAppuyez sur Entrée pour lancer la mesure.')
         conductivite,Ecart_type_conductivite,Tension_etalon,Ecart_type_tension,temperature,Ecart_type_temperature = mesure_etalonnage(nbr_mesure_par_etalon,conductimeter,C25,type_conductimeter)
 
@@ -558,7 +552,7 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
     a,b=reg[0],reg[1]
     
 
-    print('Le coefficient directeur de la dernière courbe d\'étalonnage vaut :' ,a,'uS.V.cm-1','L\'Ordonnée à l\'originr de la dernière courbe d\'étalonnage vaut :' ,b,'uS.cm-1')
+   # print('Le coefficient directeur de la dernière courbe d\'étalonnage vaut :' ,a,'uS.V.cm-1','L\'Ordonnée à l\'originr de la dernière courbe d\'étalonnage vaut :' ,b,'uS.cm-1')
     
     #Calcul coefficient de corrélation linéaire 
     # R_carre= np.square(np.corrcoef(list_tension_25,list_conductivite_25)[0,1])
@@ -584,25 +578,26 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
     plt.plot(list_tension,list_conductivite, 'o', color = 'purple')
     plt.plot(x,y,'--',color='purple')
     plt.xlabel('Tension  de l\'échantillon (V) ')
-    plt.ylabel('Conductivité de l\'échantillon (us/cm)')
+    plt.ylabel('Conductivité de l\'échantillon ( μS/cm)')
     plt.axis([0, np.max(list_tension)+0.25*np.max(list_tension), 0, np.max(list_conductivite) +0.25*np.max(list_conductivite)])
     # plt.legend()
     
     print('Une courbe d\'étalonnage sera enregistrée automatiquement')
     titre_courbe=input(interface_nom_graphique)
     plt.title('%s' %titre_courbe)
-    choix_format_fig=int(input(format_figures))
-    if choix_format_fig==1:
-        format='pdf'
-    elif choix_format_fig==2:
-        format='svg'
-    elif choix_format_fig==3:
-        format='png'
-    elif choix_format_fig==4:
-        format='jpeg'
-    else :
-        print('Merci de répondre uniquement 1 ou 2')
-  
+    # choix_format_fig=int(input(format_figures))
+    # if choix_format_fig==1:
+    #     format='pdf'
+    # elif choix_format_fig==2:
+    #     format='svg'
+    # elif choix_format_fig==3:
+    #     format='png'
+    # elif choix_format_fig==4:
+    #     format='jpeg'
+    # else :
+    #     print('Merci de répondre uniquement 1 ou 2')
+   
+    format='pdf'
  
     plt.savefig('../data/figures/%s.%s' %(titre_courbe,format))
 
@@ -612,7 +607,7 @@ def Etalonnage_K10(nbr_etalon,nbr_mesure_par_etalon,conductimeter,type_conductim
     print('\n Votre courbe d\'étalonnage a été enregistrée avec succès. \nLes données du fichier %s seront enregistrées automatiquement dans le fichier data_%s.csv' %(titre_courbe,titre_courbe))
     
     np.savetxt('../data/data_etalonnage/dernier_etalonnage_K10.csv',[[a,b]] ,delimiter = ';',fmt = '%.2f',header="Coefficient directeur dernière courbe étalonnage; Ordonnée à l'origine")
-    np.savetxt('../data/data_etalonnage/data_%s.csv' %(titre_courbe), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°; Conductivité de la solution (us/cm);Conductivité de la solution à 25°C (uS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
+    np.savetxt('../data/data_etalonnage/data_%s.csv' %(titre_courbe), donnees, delimiter = ';',fmt = '%.2f', header="Étalon n°; Conductivité de la solution ( μS/cm);Conductivité de la solution à 25°C ( μS/cm);Température de l'échantillon (°C);Tension mesurée par le conductimètre (V)")
     print('Vos mesures sont désormais stockées dans le fichier donnees_etalonnage_K10 %s.csv'%date)    
     
     
@@ -672,7 +667,7 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
    
   
     input('Veuillez préparer votre échantillon, puis appuyer sur Entrée pour lancer la mesure.')
-    print('Vos mesures sont en cours, patientez s\'il vous plait.')
+    print('Vos mesures sont en cours, patientez s\'il vous plait.\n\n')
     conductimeter.flushInput()
     for i in range(nbr_mesure_par_echantillon): 
     
@@ -687,13 +682,13 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
             list_conductivite.append(conductivite)
             list_temp.append(temperature)
             list_C25.append(C25)
-            print('Conductivité :',conductivite,'us/cm','Conductivité à 25 °C :',C25,'uS/cm', 'Température =',temperature,'°C')
+            print('Conductivité:',conductivite,' μS/cm ;', 'Température:',temperature,'°C ',end="\r")
             donnees.append([i,conductivite,C25,temperature,tension])
        
         
        
         except Exception:
-            print('Erreur')
+            print('Erreur',end="\r")
             
                
         
@@ -701,6 +696,7 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
         
     Ecart_type_conductivite=np.std(list_conductivite)
     Ecart_type_temperature=np.std(list_temp)
+    Ecart_type_C25=np.std(list_C25)
         
     conductivite=np.mean(list_conductivite)
         # conductivite=round(conductivite/Ecart_type_conductivite)*Ecart_type_conductivite
@@ -710,7 +706,7 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
         
         
         
-    print('-> Resultat : La température moyenne est : ',temperature,'(±)',Ecart_type_temperature, '°C \nLa conductivité moyenne est de : ', np.mean(list_conductivite),'(±)',Ecart_type_conductivite,'uS/cm.\nLa conductivité de votre échantillon à 25 ° C vaut : ',np.mean(list_C25))
+    print('\n\nTempérature moyenne: ',temperature,'(±)',Ecart_type_temperature, '°C','\nConductivité moyenne: ', np.mean(list_conductivite),'(±)',Ecart_type_conductivite,'μS/cm','\nConductivité à 25 ° C: ',np.mean(list_C25),'(±)',Ecart_type_C25,'μS/cm')
     donnees_moyennes.append([np.mean(list_temp), np.mean(list_conductivite)])
         
     date= datetime.now()
@@ -718,9 +714,9 @@ def Mesures_K1(a,b,nbr_mesure_par_echantillon,conductimeter):
     
     
     
-    np.savetxt('../data/data_mesures/data_conductivité_K10 du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm);Conductivité méthode 2(uS/cm);Conductivité de l\'échantillon à 25°C méthode 2 (uS/cm)')
+    np.savetxt('../data/data_mesures/data_conductivité_K10 du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité( μS/cm);Conductivité de l\'échantillon à 25°C ( μS/cm);Conductivité méthode 2( μS/cm);Conductivité de l\'échantillon à 25°C méthode 2 ( μS/cm)')
     
-    print('Vos mesures sont désormais stockées dans le fichier data_conductivite_K10 du %s.csv.' %date)
+    # print('Vos mesures sont désormais stockées dans le fichier data_conductivite_K10 du %s.csv.' %date)
     return conductivite,C25,temperature,date
 
 def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
@@ -781,7 +777,7 @@ def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
             list_conductivite.append(conductivite)
             list_temp.append(temperature)
             list_C25.append(C25)
-            print('Conductivité :',conductivite,'us/cm','Conductivité à 25 °C :',C25,'uS/cm', 'Température =',temperature,'°C')
+            print('Conductivité:',conductivite,' μS/cm ;', 'Température:',temperature,'°C ',end="\r")
             donnees.append([i,conductivite,C25,temperature,tension])
            
         
@@ -789,7 +785,7 @@ def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
         except Exception:
             pass
             
-               
+    print('')       
         
         
         
@@ -807,14 +803,14 @@ def Mesures_K10(a,b,nbr_mesure_par_echantillon,conductimeter):
 
         
         
-    print('-> Resultat : La température moyenne est : ',temperature, '°C \nLa conductivité moyenne est de : ', conductivite,'uS/cm.\nLa conductivité de votre échantillon à 25 ° C vaut : ',np.mean(list_C25))
+    print('-> Resultat : La température moyenne est : ',temperature, '°C \nLa conductivité moyenne est de : ', conductivite,' μS/cm.\nLa conductivité de votre échantillon à 25 ° C vaut : ',np.mean(list_C25))
    
         
     date= datetime.now()
     date=date.replace(second=0,microsecond=0)
     
-    np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité(uS/cm);Conductivité de l\'échantillon à 25°C (uS/cm);Conductivité méthode 2(uS/cm);Conductivité de l\'échantillon à 25°C méthode 2 (uS/cm)')
-    np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees_moyennes, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité moyenne (uS/cm);Conductivité moyenne de l\'échantillon à 25°C (uS/cm);Conductivité méthode 2(uS/cm);Conductivité de l\'échantillon à 25°C méthode 2 (uS/cm)')
+    np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité( μS/cm);Conductivité de l\'échantillon à 25°C ( μS/cm);Conductivité méthode 2( μS/cm);Conductivité de l\'échantillon à 25°C méthode 2 ( μS/cm)')
+    np.savetxt('../data/data_mesures/data_conductivité du %s.csv' %date, donnees_moyennes, delimiter = ';',fmt = '%.2f', header='Température(°C);Conductivité moyenne ( μS/cm);Conductivité moyenne de l\'échantillon à 25°C ( μS/cm);Conductivité méthode 2( μS/cm);Conductivité de l\'échantillon à 25°C méthode 2 ( μS/cm)')
     print('Vos mesures sont désormais stockées dans le fichier data_conductivite du %s.csv.' %date)
     return conductivite,C25,temperature,date
 
@@ -870,7 +866,7 @@ def correction_temperature_etalonnage(C25,Temperature_echantillon):
     
     
     conductivite_corrige=(alpha*(C25))*(Temperature_echantillon-25)+ C25
-    print('Conductivité:',conductivite_corrige,'uS/cm',' Temperature:',Temperature_echantillon,'°C')
+    #print('Conductivité:',conductivite_corrige,' μS/cm',' Temperature:',Temperature_echantillon,'°C')
     return conductivite_corrige
 
 
